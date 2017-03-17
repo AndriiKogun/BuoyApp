@@ -17,6 +17,7 @@
 		B5527F871E7B35EF0071C844 /* BuoyAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F861E7B35EF0071C844 /* BuoyAppTests.m */; };
 		B5527F921E7B35EF0071C844 /* BuoyAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F911E7B35EF0071C844 /* BuoyAppUITests.m */; };
 		B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FA01E7B3BD30071C844 /* AKServerManager.m */; };
+		B5527FA61E7C80130071C844 /* AKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FA51E7C80120071C844 /* AKCoreDataManager.m */; };
 		F843AEFD2F20F45002D1B7D9 /* libPods-BuoyApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 657DB10C01D1855E54B59315 /* libPods-BuoyApp.a */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,12 @@
 		B5527F931E7B35EF0071C844 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5527F9F1E7B3BD30071C844 /* AKServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKServerManager.h; sourceTree = "<group>"; };
 		B5527FA01E7B3BD30071C844 /* AKServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKServerManager.m; sourceTree = "<group>"; };
+		B5527FA41E7C80120071C844 /* AKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKCoreDataManager.h; sourceTree = "<group>"; };
+		B5527FA51E7C80120071C844 /* AKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKCoreDataManager.m; sourceTree = "<group>"; };
+		B5527FA71E7C81AC0071C844 /* AKBuoyModel+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AKBuoyModel+CoreDataClass.h"; sourceTree = "<group>"; };
+		B5527FA81E7C81AC0071C844 /* AKBuoyModel+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AKBuoyModel+CoreDataClass.m"; sourceTree = "<group>"; };
+		B5527FA91E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AKBuoyModel+CoreDataProperties.h"; sourceTree = "<group>"; };
+		B5527FAA1E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AKBuoyModel+CoreDataProperties.m"; sourceTree = "<group>"; };
 		FF66F5F6100E246C5B9B091A /* Pods-BuoyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuoyApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,8 +137,11 @@
 		B5527F681E7B35EF0071C844 /* BuoyApp */ = {
 			isa = PBXGroup;
 			children = (
+				B5527FAD1E7C81B10071C844 /* Model */,
 				B5527F6C1E7B35EF0071C844 /* AppDelegate.h */,
 				B5527F6D1E7B35EF0071C844 /* AppDelegate.m */,
+				B5527FA41E7C80120071C844 /* AKCoreDataManager.h */,
+				B5527FA51E7C80120071C844 /* AKCoreDataManager.m */,
 				B5527F6F1E7B35EF0071C844 /* ViewController.h */,
 				B5527F701E7B35EF0071C844 /* ViewController.m */,
 				B5527F9F1E7B3BD30071C844 /* AKServerManager.h */,
@@ -170,6 +180,17 @@
 				B5527F931E7B35EF0071C844 /* Info.plist */,
 			);
 			path = BuoyAppUITests;
+			sourceTree = "<group>";
+		};
+		B5527FAD1E7C81B10071C844 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B5527FA71E7C81AC0071C844 /* AKBuoyModel+CoreDataClass.h */,
+				B5527FA81E7C81AC0071C844 /* AKBuoyModel+CoreDataClass.m */,
+				B5527FA91E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.h */,
+				B5527FAA1E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,6 +384,7 @@
 				B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */,
 				B5527F711E7B35EF0071C844 /* ViewController.m in Sources */,
 				B5527F6E1E7B35EF0071C844 /* AppDelegate.m in Sources */,
+				B5527FA61E7C80130071C844 /* AKCoreDataManager.m in Sources */,
 				B5527F6B1E7B35EF0071C844 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

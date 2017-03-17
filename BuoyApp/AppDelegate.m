@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "AKServerManager.h"
+#import "AKCoreDataManager.h"
 
 @interface AppDelegate ()
 
@@ -17,10 +17,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    [[AKServerManager sharedManager] getBuoysListWith:^(NSDictionary *response, NSError *error) {
-        
-    }];
+    //[[AKCoreDataManager sharedManager] getBuoysFromServer];
+    //[[AKCoreDataManager sharedManager] deleteAllObjects];
+    NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
+    [[AKCoreDataManager sharedManager] printArray:allObjects];
     
     return YES;
 }
