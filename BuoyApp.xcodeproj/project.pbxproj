@@ -16,6 +16,8 @@
 		B5527F7C1E7B35EF0071C844 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5527F7A1E7B35EF0071C844 /* LaunchScreen.storyboard */; };
 		B5527F871E7B35EF0071C844 /* BuoyAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F861E7B35EF0071C844 /* BuoyAppTests.m */; };
 		B5527F921E7B35EF0071C844 /* BuoyAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F911E7B35EF0071C844 /* BuoyAppUITests.m */; };
+		B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FA01E7B3BD30071C844 /* AKServerManager.m */; };
+		F843AEFD2F20F45002D1B7D9 /* libPods-BuoyApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 657DB10C01D1855E54B59315 /* libPods-BuoyApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		38B2FFEBF472842AD1E825A4 /* Pods-BuoyApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuoyApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp.debug.xcconfig"; sourceTree = "<group>"; };
+		657DB10C01D1855E54B59315 /* libPods-BuoyApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BuoyApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5527F661E7B35EF0071C844 /* BuoyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuoyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5527F6A1E7B35EF0071C844 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5527F6C1E7B35EF0071C844 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,6 +57,9 @@
 		B5527F8D1E7B35EF0071C844 /* BuoyAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuoyAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5527F911E7B35EF0071C844 /* BuoyAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BuoyAppUITests.m; sourceTree = "<group>"; };
 		B5527F931E7B35EF0071C844 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5527F9F1E7B3BD30071C844 /* AKServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKServerManager.h; sourceTree = "<group>"; };
+		B5527FA01E7B3BD30071C844 /* AKServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKServerManager.m; sourceTree = "<group>"; };
+		FF66F5F6100E246C5B9B091A /* Pods-BuoyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuoyApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F843AEFD2F20F45002D1B7D9 /* libPods-BuoyApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +88,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4FBF399C1183776B48301080 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				38B2FFEBF472842AD1E825A4 /* Pods-BuoyApp.debug.xcconfig */,
+				FF66F5F6100E246C5B9B091A /* Pods-BuoyApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		549D98C45632770A6F6EFEDB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				657DB10C01D1855E54B59315 /* libPods-BuoyApp.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B5527F5D1E7B35EF0071C844 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +112,8 @@
 				B5527F851E7B35EF0071C844 /* BuoyAppTests */,
 				B5527F901E7B35EF0071C844 /* BuoyAppUITests */,
 				B5527F671E7B35EF0071C844 /* Products */,
+				4FBF399C1183776B48301080 /* Pods */,
+				549D98C45632770A6F6EFEDB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +134,8 @@
 				B5527F6D1E7B35EF0071C844 /* AppDelegate.m */,
 				B5527F6F1E7B35EF0071C844 /* ViewController.h */,
 				B5527F701E7B35EF0071C844 /* ViewController.m */,
+				B5527F9F1E7B3BD30071C844 /* AKServerManager.h */,
+				B5527FA01E7B3BD30071C844 /* AKServerManager.m */,
 				B5527F721E7B35EF0071C844 /* Main.storyboard */,
 				B5527F781E7B35EF0071C844 /* Assets.xcassets */,
 				B5527F7A1E7B35EF0071C844 /* LaunchScreen.storyboard */,
@@ -150,9 +179,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5527F961E7B35EF0071C844 /* Build configuration list for PBXNativeTarget "BuoyApp" */;
 			buildPhases = (
+				AFE8CB64DF7B65BB27FDE9BC /* [CP] Check Pods Manifest.lock */,
 				B5527F621E7B35EF0071C844 /* Sources */,
 				B5527F631E7B35EF0071C844 /* Frameworks */,
 				B5527F641E7B35EF0071C844 /* Resources */,
+				853A5EA013BAAA7F8EB93BDB /* [CP] Embed Pods Frameworks */,
+				169E6ACF0CC33FC61C02F7BC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -274,12 +306,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		169E6ACF0CC33FC61C02F7BC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		853A5EA013BAAA7F8EB93BDB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFE8CB64DF7B65BB27FDE9BC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B5527F621E7B35EF0071C844 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				B5527F771E7B35EF0071C844 /* BuoyApp.xcdatamodeld in Sources */,
+				B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */,
 				B5527F711E7B35EF0071C844 /* ViewController.m in Sources */,
 				B5527F6E1E7B35EF0071C844 /* AppDelegate.m in Sources */,
 				B5527F6B1E7B35EF0071C844 /* main.m in Sources */,
@@ -429,6 +510,7 @@
 		};
 		B5527F971E7B35EF0071C844 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38B2FFEBF472842AD1E825A4 /* Pods-BuoyApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C24TZYQTQV;
@@ -441,6 +523,7 @@
 		};
 		B5527F981E7B35EF0071C844 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF66F5F6100E246C5B9B091A /* Pods-BuoyApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = C24TZYQTQV;
@@ -520,6 +603,7 @@
 				B5527F981E7B35EF0071C844 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5527F991E7B35EF0071C844 /* Build configuration list for PBXNativeTarget "BuoyAppTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +612,7 @@
 				B5527F9B1E7B35EF0071C844 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5527F9C1E7B35EF0071C844 /* Build configuration list for PBXNativeTarget "BuoyAppUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +621,7 @@
 				B5527F9E1E7B35EF0071C844 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
