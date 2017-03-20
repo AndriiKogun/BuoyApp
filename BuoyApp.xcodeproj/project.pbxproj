@@ -18,6 +18,11 @@
 		B5527F921E7B35EF0071C844 /* BuoyAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F911E7B35EF0071C844 /* BuoyAppUITests.m */; };
 		B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FA01E7B3BD30071C844 /* AKServerManager.m */; };
 		B5527FA61E7C80130071C844 /* AKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FA51E7C80120071C844 /* AKCoreDataManager.m */; };
+		B5527FB01E7C85840071C844 /* AKCoreDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FAF1E7C85840071C844 /* AKCoreDataViewController.m */; };
+		B5527FB31E7C86860071C844 /* AKMasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FB21E7C86860071C844 /* AKMasterTableViewController.m */; };
+		B5527FB81E7DD4CA0071C844 /* UIColor+AKMyCollors.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FB71E7DD4CA0071C844 /* UIColor+AKMyCollors.m */; };
+		B5527FC11E7E06180071C844 /* AKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527FC01E7E06180071C844 /* AKIntroViewController.m */; };
+		B55280091E8034EA0071C844 /* AKUtilis.m in Sources */ = {isa = PBXBuildFile; fileRef = B55280081E8034EA0071C844 /* AKUtilis.m */; };
 		F843AEFD2F20F45002D1B7D9 /* libPods-BuoyApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 657DB10C01D1855E54B59315 /* libPods-BuoyApp.a */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +71,16 @@
 		B5527FA81E7C81AC0071C844 /* AKBuoyModel+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AKBuoyModel+CoreDataClass.m"; sourceTree = "<group>"; };
 		B5527FA91E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AKBuoyModel+CoreDataProperties.h"; sourceTree = "<group>"; };
 		B5527FAA1E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AKBuoyModel+CoreDataProperties.m"; sourceTree = "<group>"; };
+		B5527FAE1E7C85840071C844 /* AKCoreDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKCoreDataViewController.h; sourceTree = "<group>"; };
+		B5527FAF1E7C85840071C844 /* AKCoreDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKCoreDataViewController.m; sourceTree = "<group>"; };
+		B5527FB11E7C86860071C844 /* AKMasterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKMasterTableViewController.h; sourceTree = "<group>"; };
+		B5527FB21E7C86860071C844 /* AKMasterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKMasterTableViewController.m; sourceTree = "<group>"; };
+		B5527FB61E7DD4CA0071C844 /* UIColor+AKMyCollors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AKMyCollors.h"; sourceTree = "<group>"; };
+		B5527FB71E7DD4CA0071C844 /* UIColor+AKMyCollors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AKMyCollors.m"; sourceTree = "<group>"; };
+		B5527FBF1E7E06180071C844 /* AKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKIntroViewController.h; sourceTree = "<group>"; };
+		B5527FC01E7E06180071C844 /* AKIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKIntroViewController.m; sourceTree = "<group>"; };
+		B55280071E8034EA0071C844 /* AKUtilis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKUtilis.h; sourceTree = "<group>"; };
+		B55280081E8034EA0071C844 /* AKUtilis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKUtilis.m; sourceTree = "<group>"; };
 		FF66F5F6100E246C5B9B091A /* Pods-BuoyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuoyApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuoyApp/Pods-BuoyApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,18 +152,19 @@
 		B5527F681E7B35EF0071C844 /* BuoyApp */ = {
 			isa = PBXGroup;
 			children = (
-				B5527FAD1E7C81B10071C844 /* Model */,
 				B5527F6C1E7B35EF0071C844 /* AppDelegate.h */,
 				B5527F6D1E7B35EF0071C844 /* AppDelegate.m */,
 				B5527FA41E7C80120071C844 /* AKCoreDataManager.h */,
 				B5527FA51E7C80120071C844 /* AKCoreDataManager.m */,
-				B5527F6F1E7B35EF0071C844 /* ViewController.h */,
-				B5527F701E7B35EF0071C844 /* ViewController.m */,
 				B5527F9F1E7B3BD30071C844 /* AKServerManager.h */,
 				B5527FA01E7B3BD30071C844 /* AKServerManager.m */,
-				B5527F721E7B35EF0071C844 /* Main.storyboard */,
+				B55280071E8034EA0071C844 /* AKUtilis.h */,
+				B55280081E8034EA0071C844 /* AKUtilis.m */,
+				B5527FB91E7DD54F0071C844 /* Category */,
+				B5527FAD1E7C81B10071C844 /* Model */,
+				B5527FB41E7C87B10071C844 /* View */,
+				B5527FB51E7C87E90071C844 /* View Controllers */,
 				B5527F781E7B35EF0071C844 /* Assets.xcassets */,
-				B5527F7A1E7B35EF0071C844 /* LaunchScreen.storyboard */,
 				B5527F7D1E7B35EF0071C844 /* Info.plist */,
 				B5527F751E7B35EF0071C844 /* BuoyApp.xcdatamodeld */,
 				B5527F691E7B35EF0071C844 /* Supporting Files */,
@@ -191,6 +207,39 @@
 				B5527FAA1E7C81AC0071C844 /* AKBuoyModel+CoreDataProperties.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		B5527FB41E7C87B10071C844 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B5527F721E7B35EF0071C844 /* Main.storyboard */,
+				B5527F7A1E7B35EF0071C844 /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		B5527FB51E7C87E90071C844 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B5527F6F1E7B35EF0071C844 /* ViewController.h */,
+				B5527F701E7B35EF0071C844 /* ViewController.m */,
+				B5527FAE1E7C85840071C844 /* AKCoreDataViewController.h */,
+				B5527FAF1E7C85840071C844 /* AKCoreDataViewController.m */,
+				B5527FB11E7C86860071C844 /* AKMasterTableViewController.h */,
+				B5527FB21E7C86860071C844 /* AKMasterTableViewController.m */,
+				B5527FBF1E7E06180071C844 /* AKIntroViewController.h */,
+				B5527FC01E7E06180071C844 /* AKIntroViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		B5527FB91E7DD54F0071C844 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				B5527FB61E7DD4CA0071C844 /* UIColor+AKMyCollors.h */,
+				B5527FB71E7DD4CA0071C844 /* UIColor+AKMyCollors.m */,
+			);
+			name = Category;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -380,11 +429,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5527FB31E7C86860071C844 /* AKMasterTableViewController.m in Sources */,
+				B5527FC11E7E06180071C844 /* AKIntroViewController.m in Sources */,
+				B5527FB81E7DD4CA0071C844 /* UIColor+AKMyCollors.m in Sources */,
 				B5527F771E7B35EF0071C844 /* BuoyApp.xcdatamodeld in Sources */,
 				B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */,
 				B5527F711E7B35EF0071C844 /* ViewController.m in Sources */,
+				B55280091E8034EA0071C844 /* AKUtilis.m in Sources */,
 				B5527F6E1E7B35EF0071C844 /* AppDelegate.m in Sources */,
 				B5527FA61E7C80130071C844 /* AKCoreDataManager.m in Sources */,
+				B5527FB01E7C85840071C844 /* AKCoreDataViewController.m in Sources */,
 				B5527F6B1E7B35EF0071C844 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

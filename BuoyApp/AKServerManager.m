@@ -1,6 +1,6 @@
 //
 //  AKServerManager.m
-//  test
+//  BuoyApp
 //
 //  Created by Andrii on 3/16/17.
 //  Copyright © 2017 Andrii. All rights reserved.
@@ -8,6 +8,8 @@
 
 #import "AKServerManager.h"
 #import "AFHTTPSessionManager.h"
+
+#import "AKCoreDataManager.h"
 
 static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywebserver.staturedev.com/api/MobileApi/";
 
@@ -48,16 +50,17 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
         CGFloat total = downloadProgress.totalUnitCount;
         CGFloat compl = downloadProgress.completedUnitCount;
         CGFloat percents = (compl / total);
-        NSLog(@"Progress: %f",percents);
+        result(percents, nil, nil);
         
     }  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    
         NSArray *returnValue = [responseObject objectForKey:@"ReturnValue"];
         NSDictionary *response = [returnValue firstObject];
-        result(response, nil);
-      
+        [[AKCoreDataManager sharedManager] createAndSaveBuoyEntityFrom:response];
+        result(1, response, nil);
+
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        result(nil, error);
+        result(0, nil, error);
     }];
 }
 

@@ -3,7 +3,7 @@
 //  BuoyApp
 //
 //  Created by Andrii on 3/17/17.
-//  Copyright © 2016 Andrii. All rights reserved.
+//  Copyright © 2017 Andrii. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -22,7 +22,7 @@
 - (void)deleteAllObjects;
 - (void)printArray:(NSArray *)array;
 
-- (void)getBuoysFromServer;
+- (void)createAndSaveBuoyEntityFrom:(NSDictionary *)response;
 - (void)saveContext;
 
 @end

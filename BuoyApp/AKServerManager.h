@@ -1,14 +1,15 @@
 //
 //  AKServerManager.h
-//  test
+//  BuoyApp
 //
 //  Created by Andrii on 3/16/17.
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-typedef void(^AKLocationsList)(NSDictionary *response, NSError *error);
+typedef void(^AKLocationsList)(CGFloat progress, NSDictionary *response, NSError *error);
 typedef void(^AKBouyInfo)(NSDictionary *response, NSError *error);
 typedef void(^AKTidalGeneralInfo)(NSDictionary *response, NSError *error);
 typedef void(^AKTidalTidesData)(NSDictionary *response, NSError *error);

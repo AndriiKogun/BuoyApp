@@ -3,11 +3,10 @@
 //  BuoyApp
 //
 //  Created by Andrii on 3/17/17.
-//  Copyright © 2016 Andrii. All rights reserved.
+//  Copyright © 2017 Andrii. All rights reserved.
 //
 
 #import "AKCoreDataManager.h"
-#import "AKServerManager.h"
 #import "AKBuoyModel+CoreDataClass.h"
 
 @interface AKCoreDataManager ()
@@ -27,48 +26,41 @@
     return manager;
 }
 
-- (void)getBuoysFromServer {
-    [[AKServerManager sharedManager] getBuoysListWith:^(NSDictionary *response, NSError *error) {
+- (void)createAndSaveBuoyEntityFrom:(NSDictionary *)response {
         self.currentTime = CACurrentMediaTime();
         [self addBuoys:response];
         [self saveContext];
         
         NSLog(@"Time ---------------- %f", CACurrentMediaTime() - self.currentTime);
-    }];
 }
 
 - (void)addBuoys:(NSDictionary *)buoys {
     id responseItems = [buoys objectForKey:@"Items"];
     if ([responseItems isKindOfClass:[NSArray class]]) {
         for (NSDictionary *item in (NSArray *)responseItems) {
-            [self setBuoyWith:item];
+            AKBuoyModel *buoy = [NSEntityDescription insertNewObjectForEntityForName:@"AKBuoyModel"
+                                                              inManagedObjectContext:self.managedObjectContext];
+            
+            buoy.filterType = [[item objectForKey:@"FilterType"] integerValue];
+            buoy.inactiveInUI = [[item objectForKey:@"InactiveInUI"] boolValue];
+            buoy.itemType = [[item objectForKey:@"ItemType"] integerValue];
+            buoy.level = [[item objectForKey:@"Level"] integerValue];
+            buoy.locationId = [[item objectForKey:@"LocationId"] intValue];
+            buoy.name = [item objectForKey:@"Name"];
+            buoy.parentId = [[item objectForKey:@"ParentId"] intValue];
+            
+            buoy.visibleOnBuoys = [[item objectForKey:@"VisibleOnBuoys"] integerValue];
+            buoy.visibleOnMarineForecast = [[item objectForKey:@"VisibleOnMarineForecast"] integerValue];
+            buoy.visibleOnMoonPhases = [[item objectForKey:@"VisibleOnMoonPhases"] integerValue];
+            buoy.visibleOnRadar = [[item objectForKey:@"VisibleOnRadar"] integerValue];
+            buoy.visibleOnSeaSurfaceTemp = [[item objectForKey:@"VisibleOnSeaSurfaceTemp"] integerValue];
+            buoy.visibleOnTides = [[item objectForKey:@"VisibleOnTides"] integerValue];
+            buoy.visibleOnWavewatch= [[item objectForKey:@"VisibleOnWavewatch"] integerValue];
+            buoy.visibleOnWeatherForecast = [[item objectForKey:@"VisibleOnWeatherForecast"] integerValue];
+            
             [self addBuoys:item];
         }
-    } else {
-        [self setBuoyWith:buoys];
-    }
-}
-
-- (void)setBuoyWith:(NSDictionary *)item {
-    AKBuoyModel *buoy = [NSEntityDescription insertNewObjectForEntityForName:@"AKBuoyModel"
-                                                      inManagedObjectContext:self.managedObjectContext];
-    
-    buoy.filterType = [[item objectForKey:@"FilterType"] integerValue];
-    buoy.inactiveInUI = [[item objectForKey:@"InactiveInUI"] boolValue];
-    buoy.itemType = [[item objectForKey:@"ItemType"] integerValue];
-    buoy.level = [[item objectForKey:@"Level"] integerValue];
-    buoy.locationId = [[item objectForKey:@"LocationId"] intValue];
-    buoy.name = [item objectForKey:@"Name"];
-    buoy.parentId = [[item objectForKey:@"ParentId"] intValue];
-    
-    buoy.visibleOnBuoys = [[item objectForKey:@"VisibleOnBuoys"] integerValue];
-    buoy.visibleOnMarineForecast = [[item objectForKey:@"VisibleOnMarineForecast"] integerValue];
-    buoy.visibleOnMoonPhases = [[item objectForKey:@"VisibleOnMoonPhases"] integerValue];
-    buoy.visibleOnRadar = [[item objectForKey:@"VisibleOnRadar"] integerValue];
-    buoy.visibleOnSeaSurfaceTemp = [[item objectForKey:@"VisibleOnSeaSurfaceTemp"] integerValue];
-    buoy.visibleOnTides = [[item objectForKey:@"VisibleOnTides"] integerValue];
-    buoy.visibleOnWavewatch= [[item objectForKey:@"VisibleOnWavewatch"] integerValue];
-    buoy.visibleOnWeatherForecast = [[item objectForKey:@"VisibleOnWeatherForecast"] integerValue];
+    } 
 }
 
 - (void)deleteAllObjects {
@@ -81,13 +73,18 @@
 }
 
 - (NSArray *)allObjects {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *description = [NSEntityDescription entityForName:@"AKBuoyModel"
                                                    inManagedObjectContext:self.managedObjectContext];
     
-    [request setEntity:description];
+    [fetchRequest setEntity:description];
+//    [fetchRequest setResultType:NSDictionaryResultType];
+    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"locationId == 0"];
+//    [fetchRequest setPredicate:predicate];
+    
     NSError *requestError = nil;
-    NSArray *resultArray = [self.managedObjectContext executeFetchRequest:request error:&requestError];
+    NSArray *resultArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&requestError];
     
     if (requestError) {
         NSLog(@"%@",[requestError localizedDescription]);

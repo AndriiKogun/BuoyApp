@@ -8,5 +8,7 @@ target 'BuoyApp' do
   # Pods for BuoyApp
 
   pod 'AFNetworking', '~> 3.0'
-
+  pod 'EAIntroView', '~> 2.10.0'
+  pod 'M13ProgressSuite'
+  
 end
