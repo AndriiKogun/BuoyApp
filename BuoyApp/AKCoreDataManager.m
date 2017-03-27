@@ -26,12 +26,13 @@
     return manager;
 }
 
-- (void)createAndSaveBuoyEntityFrom:(NSDictionary *)response {
-        self.currentTime = CACurrentMediaTime();
-        [self addBuoys:response];
-        [self saveContext];
-        
-        NSLog(@"Time ---------------- %f", CACurrentMediaTime() - self.currentTime);
+- (void)createObjectFromServerWith:(NSDictionary *)response isFinished:(void(^)(bool status))finished {
+    [self deleteAllObjects];
+    self.currentTime = CACurrentMediaTime();
+    [self addBuoys:response];
+    [self saveContext];
+    finished(true);
+    NSLog(@"Time ---------------- %f", CACurrentMediaTime() - self.currentTime);
 }
 
 - (void)addBuoys:(NSDictionary *)buoys {
@@ -78,10 +79,10 @@
                                                    inManagedObjectContext:self.managedObjectContext];
     
     [fetchRequest setEntity:description];
-//    [fetchRequest setResultType:NSDictionaryResultType];
+    [fetchRequest setResultType:NSDictionaryResultType];
     
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"locationId == 0"];
-//    [fetchRequest setPredicate:predicate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"parentId == 40500"];
+    [fetchRequest setPredicate:predicate];
     
     NSError *requestError = nil;
     NSArray *resultArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&requestError];

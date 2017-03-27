@@ -8,14 +8,26 @@
 
 #import "AKUtilis.h"
 
-static  NSString * const akShowIntroController = @"IntroController";
+static  NSString * const akShowIntroController = @"akShowIntroController";
+static  NSString * const akLoadDataFromServer = @"akLoadDataFromServer";
 
-BOOL showIntro() {
+bool showIntro() {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [userDefaults boolForKey:akShowIntroController];
 }
 
-void saveIntroAppearance(BOOL state) {
+void introFinished() {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults setBool:state forKey:akShowIntroController];
+    return [userDefaults setBool:true forKey:akShowIntroController];
+}
+
+
+bool loadedDataFromServer() {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults boolForKey:akLoadDataFromServer];
+}
+
+void loadFinished() {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults setBool:true forKey:akLoadDataFromServer];
 }

@@ -8,9 +8,19 @@
 
 #import "AKCoreDataViewController.h"
 
+typedef NS_ENUM(NSInteger, AKType){
+    AKTypeBuoys,
+    AKTypeMarineForecast,
+    AKTypeRadars,
+    AKTypeSeaSurfaceTemperature,
+    AKTypeTides,
+    AKTypeWavewatch,
+    AKTypeWeatherForecast,
+    AKTypeCount = 7
+};
+
 @interface AKMasterTableViewController : AKCoreDataViewController < NSFetchedResultsControllerDelegate >
 
-@property (assign ,nonatomic) int parentID;
-@property (strong, nonatomic) NSString *tableTitle;
+@property (assign, nonatomic) AKType type;
 
 @end

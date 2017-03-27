@@ -19,10 +19,10 @@
 + (AKCoreDataManager *)sharedManager;
 
 - (NSArray *)allObjects;
+
+- (void)createObjectFromServerWith:(NSDictionary *)response isFinished:(void(^)(bool status))finished;
 - (void)deleteAllObjects;
 - (void)printArray:(NSArray *)array;
-
-- (void)createAndSaveBuoyEntityFrom:(NSDictionary *)response;
 - (void)saveContext;
 
 @end

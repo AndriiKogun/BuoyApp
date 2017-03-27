@@ -11,6 +11,8 @@
 #import "UIColor+AKMyCollors.h"
 #import "AKIntroViewController.h"
 #import "AKMasterTableViewController.h"
+#import "AKMainViewController.h"
+
 
 #import "AKUtilis.h"
 
@@ -22,29 +24,37 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen  mainScreen] bounds]];
     [self.window makeKeyAndVisible];
     
-    if (!showIntro()) {
-        AKIntroViewController *vc = [[AKIntroViewController alloc] init];
-        self.window.rootViewController = vc;
-    } else {
-        AKMasterTableViewController *vc = [[AKMasterTableViewController alloc] initWithStyle:UITableViewStylePlain];
-        UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-        self.window.rootViewController = nc;
-    }
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor myBlueCollor]];
     
-//  [[AKCoreDataManager sharedManager] getBuoysFromServer];
-    
-    [[AKCoreDataManager sharedManager] deleteAllObjects];
+//    [[AKCoreDataManager sharedManager] deleteAllObjects];
     NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
     [[AKCoreDataManager sharedManager] printArray:allObjects];
     
+    
+    if (!showIntro()) {
+        AKIntroViewController *vc = [[AKIntroViewController alloc] init];
+        self.window.rootViewController = vc;
+        
+    } else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        
+        AKMasterTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
+        vc.type = AKTypeBuoys;
+        
+        UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:vc];
+        
+        AKMainViewController *mainViewController = [storyboard instantiateViewControllerWithIdentifier:@"AKMainViewController"];
+        
+        mainViewController.rootViewController = navigationController;
+        self.window.rootViewController = mainViewController;
+    }
+        
     return YES;
 }
 

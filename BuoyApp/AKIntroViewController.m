@@ -11,20 +11,20 @@
 
 #import <EAIntroView/EAIntroView.h>
 
+#import "AKMainViewController.h"
 #import "AKMasterTableViewController.h"
 #import "AKServerManager.h"
 
-static NSString * const sampleDescription1 = @"Detail information from buoys all around the world.";
-static NSString * const sampleDescription2 = @"Acurate and detail marine forecast (storms, cyclones, etс).";
-static NSString * const sampleDescription3 = @"Detail radars information for all states.";
-static NSString * const sampleDescription4 = @"Precise sea surface temperature for many regions";
-static NSString * const sampleDescription5 = @"Detail information about tides for many regions.";
-static NSString * const sampleDescription6 = @"Detail information about waves.";
-static NSString * const sampleDescription7 = @"Accurate Weather Forecasts for many places around the World.";
+static NSString * const buoysDescription = @"Detail information from buoys all around the world.";
+static NSString * const marineForecastDescription = @"Acurate and detail marine forecast (storms, cyclones, etс).";
+static NSString * const radarDescription = @"Detail radars information for all states.";
+static NSString * const seaTemperatureDescription = @"Precise sea surface temperature for many regions";
+static NSString * const tidesDescription = @"Detail information about tides for many regions.";
+static NSString * const wavewatchDescription = @"Detail information about waves.";
+static NSString * const weatherForecastDescription = @"Accurate Weather Forecasts for many places around the World.";
 
 @interface AKIntroViewController () <EAIntroDelegate>
 
-@property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) EAIntroView *intro;
 
 @end
@@ -34,8 +34,6 @@ static NSString * const sampleDescription7 = @"Accurate Weather Forecasts for ma
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // using self.navigationController.view - to display EAIntroView above navigation bar
-    self.rootView = self.view;
     [self showIntroWithSeparatePagesInitAndPageCallback];
 }
 
@@ -48,35 +46,34 @@ static NSString * const sampleDescription7 = @"Accurate Weather Forecasts for ma
 - (void)showIntroWithSeparatePagesInitAndPageCallback {
     
     EAIntroPage *page1 = [self pageWithTitle:@"Buoys"
-                                 description:sampleDescription1
-                                  titleImage:@"buoy"];
-    
+                                 description:buoysDescription
+                                  titleImage:@"Buoys"];
 
     EAIntroPage *page2 = [self pageWithTitle:@"Marine Forecast"
-                                 description:sampleDescription2
-                                  titleImage:@"marineForecast"];
+                                 description:marineForecastDescription
+                                  titleImage:@"MarineForecast"];
 
     EAIntroPage *page3 = [self pageWithTitle:@"Radars"
-                                 description:sampleDescription3
-                                  titleImage:@"radar"];
+                                 description:radarDescription
+                                  titleImage:@"Radar"];
 
     EAIntroPage *page4 = [self pageWithTitle:@"Sea Surface Temperature"
-                                description:sampleDescription4
-                                 titleImage:@"seaTemperature"];
+                                description:seaTemperatureDescription
+                                 titleImage:@"SeaTemperature"];
 
     EAIntroPage *page5 = [self pageWithTitle:@"Tides"
-                                 description:sampleDescription4
-                                  titleImage:@"tides"];
+                                 description:tidesDescription
+                                  titleImage:@"Tides"];
 
     EAIntroPage *page6 = [self pageWithTitle:@"Wavewatch"
-                                 description:sampleDescription4
-                                  titleImage:@"wavewatch"];
+                                 description:wavewatchDescription
+                                  titleImage:@"Wavewatch"];
 
     EAIntroPage *page7 = [self pageWithTitle:@"Weather Forecast"
-                                 description:sampleDescription4
-                                  titleImage:@"weatherForecast"];
+                                 description:weatherForecastDescription
+                                  titleImage:@"WeatherForecast"];
     
-    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.rootView.bounds];
+    EAIntroView *intro = [[EAIntroView alloc] initWithFrame:self.view.bounds];
     
     page7.onPageDidAppear = ^{
         [self addGetStartedButtonTo:intro];
@@ -93,7 +90,7 @@ static NSString * const sampleDescription7 = @"Accurate Weather Forecasts for ma
     
     [intro setDelegate:self];
     [intro setPages:@[page1,page2,page3,page4, page5, page6, page7]];
-    [intro showInView:self.rootView animateDuration:0];
+    [intro showInView:self.view animateDuration:0];
 }
 
 - (EAIntroPage *)pageWithTitle:(NSString *)title description:(NSString *)description titleImage:(NSString *)name {
@@ -121,22 +118,21 @@ static NSString * const sampleDescription7 = @"Accurate Weather Forecasts for ma
 }
 
 - (void)getStarted:(UIButton *)sender {
-//    [[AKServerManager sharedManager] getBuoysListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
-//        NSLog(@"%f.2",progress);
-//        if (response) {
-//            [self.intro hideWithFadeOutDuration:0.3];
-//            AKStartTableViewController *vc = [[AKStartTableViewController alloc] initWithStyle:UITableViewStylePlain];
-//            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-//            [self presentViewController:nc animated:NO completion:nil];
-//            
-//        }
-//    }];
-    
-    
     [self.intro hideWithFadeOutDuration:0.3];
-    AKMasterTableViewController *vc = [[AKMasterTableViewController alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nc animated:NO completion:nil];
+
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+
+    AKMasterTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
+    vc.type = AKTypeBuoys;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:vc];
+    
+    AKMainViewController *mainViewController = [storyboard instantiateViewControllerWithIdentifier:@"AKMainViewController"];
+    
+    mainViewController.rootViewController = navigationController;
+    
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    window.rootViewController = mainViewController;
 }
 
 

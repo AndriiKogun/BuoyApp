@@ -9,6 +9,7 @@ target 'BuoyApp' do
 
   pod 'AFNetworking', '~> 3.0'
   pod 'EAIntroView', '~> 2.10.0'
-  pod 'M13ProgressSuite'
-  
+  pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
+  pod 'LGSideMenuController', '~> 1.1.0'
+
 end

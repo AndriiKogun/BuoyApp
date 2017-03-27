@@ -6,17 +6,13 @@
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "AKTableViewController.h"
 #import <CoreData/CoreData.h>
 
-
-
-@interface AKCoreDataViewController : UITableViewController < NSFetchedResultsControllerDelegate >
+@interface AKCoreDataViewController : AKTableViewController < NSFetchedResultsControllerDelegate >
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-
-//@property (strong, nonatomic) UITableView *tableView;
 
 - (void)configureCell:(UITableViewCell *)cell withObject:(NSManagedObject *)object;
 

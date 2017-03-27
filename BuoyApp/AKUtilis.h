@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-BOOL showIntro();
 
-void saveIntroAppearance(BOOL state);
+BOOL showIntro();
+BOOL loadedDataFromServer();
+
+void introFinished();
+void loadFinished();

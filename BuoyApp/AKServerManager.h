@@ -9,20 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef void(^AKLocationsList)(CGFloat progress, NSDictionary *response, NSError *error);
-typedef void(^AKBouyInfo)(NSDictionary *response, NSError *error);
-typedef void(^AKTidalGeneralInfo)(NSDictionary *response, NSError *error);
-typedef void(^AKTidalTidesData)(NSDictionary *response, NSError *error);
-typedef void(^AKMoonPhases)(NSDictionary *response, NSError *error);
+@class AKBuoyInfo, AKTidalInfo;
 
 @interface AKServerManager : NSObject
 
 + (AKServerManager *)sharedManager;
 
-- (void)getBuoysListWith:(AKLocationsList)result;
-- (void)getBuoyInfoFor:(int32_t)locationID withResponse:(AKBouyInfo)result;
-- (void)getTidalGeneralInfoFor:(int32_t)locationID withResponse:(AKTidalGeneralInfo)result;
-- (void)getTidalTidesDataFor:(int32_t)locationID withResponse:(AKTidalTidesData)result;
-- (void)getMoonPhasesFor:(int32_t)locationID andOnDate:(NSDate *)date withResponse:(AKMoonPhases)result;
+- (void)getItemsListWith:(void(^)(CGFloat progress, NSDictionary *response, NSError *error))result;
+- (void)getBuoyInfoFor:(NSInteger)locationID withResponse:(void(^)(AKBuoyInfo *buoyInfo, NSError *error))result;
+- (void)getTidalGeneralInfoFor:(NSInteger)locationID withResponse:(void(^)(AKTidalInfo *tidalInfo, NSError *error))result;
+- (void)getTidalTidesDataFor:(NSInteger)locationID withResponse:(void(^)(NSDictionary *response, NSError *error))result;
+- (void)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSDate *)date withResponse:(void(^)(NSDictionary *response, NSError *error))result;
 
 @end

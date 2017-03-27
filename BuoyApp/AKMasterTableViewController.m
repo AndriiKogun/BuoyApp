@@ -9,101 +9,112 @@
 #import "AKMasterTableViewController.h"
 #import "AKBuoyModel+CoreDataClass.h"
 #import "AKServerManager.h"
+#import "AKBuoyInfoTableViewController.h"
+#import "AKTidalTableViewController.h"
 
-#import "M13ProgressHUD.h"
-#import "M13ProgressViewRing.h"
+#import "AKUtilis.h"
 
-static int rootID = -1;
+#import "LGSideMenuController.h"
+#import "UIViewController+LGSideMenuController.h"
+
+typedef NS_ENUM(NSInteger, AKState) {
+    AKStateHiden,
+    AKStateVisible,
+};
+
+typedef NS_ENUM(NSInteger, AKItemType) {
+    AKItemTypeRoot,
+    AKItemTypeChildItems,
+    AKSateTypeDetail,
+};
+
+static int const buoysID = 34655;
+static int const marineForecastID = 40454;
+static int const radarID = 45585;
+static int const seaTemperatureID = 41121;
+static int const tidesID = 50319;
+static int const wavewatchID = 41147;
+static int const weatherForecastID = 37062;
 
 @interface AKMasterTableViewController ()
 
-@property (weak, nonatomic) M13ProgressHUD *HUD;
+@property (assign ,nonatomic) int parentID;
 
 @end
 
 @implementation AKMasterTableViewController
 
-- (void)loadView {
-    [super loadView];
-
-    if (!self.parentID) {
-        self.parentID = rootID;
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = self.tableTitle;
+    introFinished();
+ 
+    if (!loadedDataFromServer()) {
+        [self getDataFromServer];
+    }
     
-//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(test)];
-//    self.navigationItem.rightBarButtonItem = item;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(progressHUDDidDisappear:)
+                                                 name:SVProgressHUDDidDisappearNotification
+                                               object:nil];
     
-    M13ProgressHUD *HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
-    HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
-    HUD.progressViewSize = CGSizeMake(60.0, 60.0);
-    HUD.animationPoint = CGPointMake(CGRectGetMaxX(self.view.bounds) / 2, CGRectGetMaxY(self.view.bounds) / 2);
-    HUD.primaryColor = [UIColor whiteColor];
-    HUD.secondaryColor = [UIColor clearColor];
-    
-    UIWindow *window = [[[UIApplication sharedApplication] windows] lastObject];
-    [window addSubview:HUD];
-    
-    self.HUD = HUD;
+    if (self.navigationController.viewControllers.count == 1) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Menu"] style:UIBarButtonItemStylePlain target:self action:@selector(openLeftView:)];
+    }
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self getBuoysFromServer];
+-(void)setType:(AKType)type {
+    _type = type;
+    
+        switch (type) {
+            case AKTypeBuoys:
+                self.parentID = buoysID;
+                self.title = @"Buoys";
+                break;
+            case AKTypeMarineForecast:
+                self.parentID = marineForecastID;
+                self.title = @"Marine Forecast";
+                break;
+            case AKTypeRadars:
+                self.parentID = radarID;
+                self.title = @"Radars";
+                break;
+            case AKTypeSeaSurfaceTemperature:
+                self.parentID = seaTemperatureID;
+                self.title = @"Sea Surface Temperature";
+                break;
+            case AKTypeTides:
+                self.parentID = tidesID;
+                self.title = @"Tides";
+                break;
+            case AKTypeWavewatch:
+                self.parentID = wavewatchID;
+                self.title = @"Wavewatch";
+                break;
+            case AKTypeWeatherForecast:
+                self.parentID = weatherForecastID;
+                self.title = @"Weather Forecast";
+                break;
+            default:
+                break;
+        };
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)openLeftView:(UIBarButtonItem *)sender {
+    [self.sideMenuController showLeftViewAnimated:YES completionHandler:nil];
 }
 
-- (void)getBuoysFromServer {
-    if (self.fetchedResultsController.fetchedObjects.count == 0) {
-        self.HUD.status = @"Loading";
-        [self.HUD show:YES];
+- (void)getDataFromServer {
+    [SVProgressHUD showProgress:0 status:@""];
+    [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
+        [SVProgressHUD showProgress:progress status:@""];
         
-        [[AKServerManager sharedManager] getBuoysListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
-            [self animateProgress:progress];
-            
-            if (response) {
-                self.fetchedResultsController = nil;
-            }
-        }];
-    }
-}
-
-#pragma mark - ProgressHUD animation
-
-- (void)animateProgress:(CGFloat)progress {
-    [self.HUD setProgress:progress animated:YES];
-    if (progress >= 1) {
-        [self performSelector:@selector(setComplete) withObject:nil afterDelay:self.HUD.animationDuration + .1];
-    }
-}
-
-- (void)setOne
-{
-    [self.HUD setProgress:1.0 animated:YES];
-    [self performSelector:@selector(setComplete) withObject:nil afterDelay:self.HUD.animationDuration + .1];
-}
-
-- (void)setComplete
-{
-    [self.HUD performAction:M13ProgressViewActionSuccess animated:YES];
-    [self performSelector:@selector(reset) withObject:nil afterDelay:1.5];
-}
-
-- (void)reset
-{
-    [self.HUD hide:YES];
-    [self.HUD performAction:M13ProgressViewActionNone animated:NO];
-    [self.tableView reloadData];
-
+        if (response) {
+//            self.fetchedResultsController = nil;
+            [SVProgressHUD dismiss];
+            loadFinished();
+        }
+    }];
 }
 
 #pragma mark - NSFetchedResultsController
@@ -147,30 +158,42 @@ static int rootID = -1;
     cell.textLabel.text = buoy.name;
     cell.detailTextLabel.text = nil;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.backgroundColor = [UIColor clearColor];
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     AKBuoyModel *buoy = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
-    NSLog(@"VisibleOnBuoys: %zd, ItemType: %zd",buoy.visibleOnBuoys, buoy.itemType);
+    NSLog(@"VisibleOnTides: %zd, ItemType: %zd",buoy.visibleOnTides, buoy.itemType);
     NSLog(@"ParentID: %zd, locationID: %zd",buoy.parentId, buoy.locationId);
     
-    if (buoy.itemType == 1 || buoy.parentId == rootID) {
-        AKMasterTableViewController * vc = [[AKMasterTableViewController alloc]initWithStyle:UITableViewStylePlain];
+    if (buoy.itemType == AKItemTypeChildItems) {
+        AKMasterTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
         vc.parentID = buoy.locationId;
-        vc.tableTitle = buoy.name;
         [self.navigationController pushViewController:vc animated:YES];
 
-    } else if (buoy.visibleOnBuoys == 1 && buoy.itemType == 2) {
+    } else if (buoy.visibleOnBuoys == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
+        AKBuoyInfoTableViewController *vc = [[AKBuoyInfoTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        vc.locationID = buoy.locationId;
+        [self.navigationController pushViewController:vc animated:YES];
         
-    }
+    } else if (buoy.visibleOnTides == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
+        AKTidalTableViewController *vc = [[AKTidalTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        vc.locationID = buoy.locationId;
+        [self.navigationController pushViewController:vc animated:YES];
 
+        [[AKServerManager sharedManager] getTidalTidesDataFor:buoy.locationId withResponse:^(NSDictionary *response, NSError *error) {
+            
+        }];
+        
+    } else if (buoy.visibleOnMoonPhases == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
+        [[AKServerManager sharedManager] getMoonPhasesFor:buoy.locationId andOnDate:[NSDate date] withResponse:^(NSDictionary *response, NSError *error) {
+            
+        }];
+    }
 }
 
 

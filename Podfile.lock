@@ -17,19 +17,31 @@ PODS:
   - EAIntroView (2.10.0):
     - EARestrictedScrollView (~> 1.1.0)
   - EARestrictedScrollView (1.1.0)
-  - M13ProgressSuite (1.2.9)
+  - LGSideMenuController (1.1.0)
+  - SVProgressHUD (2.1.2)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - EAIntroView (~> 2.10.0)
-  - M13ProgressSuite
+  - LGSideMenuController (~> 1.1.0)
+  - SVProgressHUD (from `https://github.com/SVProgressHUD/SVProgressHUD.git`)
+
+EXTERNAL SOURCES:
+  SVProgressHUD:
+    :git: https://github.com/SVProgressHUD/SVProgressHUD.git
+
+CHECKOUT OPTIONS:
+  SVProgressHUD:
+    :commit: 803bc1e473e2861f75abf06174d9c937de7a0fe0
+    :git: https://github.com/SVProgressHUD/SVProgressHUD.git
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   EAIntroView: 3494b7bbd1212e3a4f7e8d16194a1b00e7b9abb2
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
-  M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
+  LGSideMenuController: dddebb372be0951db52bf78bced81e6cc01b94a4
+  SVProgressHUD: d65371a8e4482380deddb9fe60e14e59ddb30eb3
 
-PODFILE CHECKSUM: eaff1a140fcf033a5d455993ac97508c25b4e9b1
+PODFILE CHECKSUM: cb7648b6046296006173e2e33b587684a18a3d55
 
 COCOAPODS: 1.1.1
