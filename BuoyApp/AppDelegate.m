@@ -9,12 +9,10 @@
 #import "AppDelegate.h"
 #import "AKCoreDataManager.h"
 #import "UIColor+AKMyCollors.h"
-#import "AKIntroViewController.h"
-#import "AKMasterTableViewController.h"
-#import "AKMainViewController.h"
+#import "AKFirstLaunch.h"
 
+#import "AFNetworkActivityIndicatorManager.h"
 
-#import "AKUtilis.h"
 
 @interface AppDelegate ()
 
@@ -24,37 +22,20 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen  mainScreen] bounds]];
-    [self.window makeKeyAndVisible];
-    
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor myBlueCollor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor buoyCollor]];
+    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
 //    [[AKCoreDataManager sharedManager] deleteAllObjects];
+    
+    
     NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
     [[AKCoreDataManager sharedManager] printArray:allObjects];
     
+    [AKFirstLaunch firstLaunch];
     
-    if (!showIntro()) {
-        AKIntroViewController *vc = [[AKIntroViewController alloc] init];
-        self.window.rootViewController = vc;
-        
-    } else {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        
-        AKMasterTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
-        vc.type = AKTypeBuoys;
-        
-        UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:vc];
-        
-        AKMainViewController *mainViewController = [storyboard instantiateViewControllerWithIdentifier:@"AKMainViewController"];
-        
-        mainViewController.rootViewController = navigationController;
-        self.window.rootViewController = mainViewController;
-    }
-        
     return YES;
 }
 

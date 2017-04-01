@@ -8,6 +8,7 @@
 
 #import "AKLeftViewController.h"
 #import "AKMasterTableViewController.h"
+#import "AKTableRepresentation.h"
 
 #import "UIViewController+LGSideMenuController.h"
 
@@ -26,11 +27,16 @@
 {
     [super viewDidLoad];
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView selectRowAtIndexPath:indexPath
+                                animated:YES
+                            scrollPosition:UITableViewScrollPositionNone];
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return AKTypeCount;
+    return [[AKTableRepresentation tableRepresentation] [@"titles"] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -38,51 +44,28 @@
     
     AKMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
-    UIImage *image = nil;
-    NSString *text = nil;
+    NSArray *images = [AKTableRepresentation tableRepresentation] [@"images"];
+    NSArray *titles = [AKTableRepresentation tableRepresentation] [@"titles"];
     
-    switch (indexPath.row) {
-        case AKTypeBuoys:
-            image = [UIImage imageNamed:@"Buoys-Small"];
-            text = @"Buoys";
-            break;
-        case AKTypeMarineForecast:
-            image = [UIImage imageNamed:@"MarineForecast-Small"];
-            text = @"Marine Forecast";
-            break;
-        case AKTypeRadars:
-            image = [UIImage imageNamed:@"Radar-Small"];
-            text = @"Radars";
-            break;
-        case AKTypeSeaSurfaceTemperature:
-            image = [UIImage imageNamed:@"SeaTemperature-Small"];
-            text = @"Sea Surface Temperature";
-            break;
-        case AKTypeTides:
-            image = [UIImage imageNamed:@"Tides-Small"];
-            text = @"Tides";
-            break;
-        case AKTypeWavewatch:
-            image = [UIImage imageNamed:@"Wavewatch-Small"];
-            text = @"Wavewatch";
-            break;
-        case AKTypeWeatherForecast:
-            image = [UIImage imageNamed:@"WeatherForecast-Small"];
-            text = @"Weather Forecast";
-
-            break;
-        default:
-            break;
-    }
-    cell.menuImageView.image = image;
-    cell.menuLabel.text = text;
+    cell.menuImageView.image = [UIImage imageNamed:[images objectAtIndex:indexPath.row]];
+    cell.menuLabel.text = [titles objectAtIndex:indexPath.row];
     
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     AKMasterTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
-    vc.type = indexPath.row;
+    
+    NSArray *parentIDs = [AKTableRepresentation tableRepresentation] [@"parentIDs"];
+    NSArray *titles = [AKTableRepresentation tableRepresentation] [@"titles"];
+    NSArray *colors = [AKTableRepresentation tableRepresentation] [@"colors"];
+
+    vc.parentID = [[parentIDs objectAtIndex:indexPath.row] intValue];
+    vc.title = [titles objectAtIndex:indexPath.row];
+
+    [[UINavigationBar appearance] setBarTintColor:[colors objectAtIndex:indexPath.row]];
+
+    
     UINavigationController *nc = [[UINavigationController alloc]initWithRootViewController:vc];
     
     LGSideMenuController *sideMenuController = (LGSideMenuController *)[UIApplication sharedApplication].delegate.window.rootViewController;

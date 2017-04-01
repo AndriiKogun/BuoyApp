@@ -8,18 +8,18 @@
 
 
 #import "AKIntroViewController.h"
+#import "AKServerManager.h"
+#import "AKFirstLaunch.h"
+
+#import "UIColor+AKMyCollors.h"
 
 #import <EAIntroView/EAIntroView.h>
 
-#import "AKMainViewController.h"
-#import "AKMasterTableViewController.h"
-#import "AKServerManager.h"
-
-static NSString * const buoysDescription = @"Detail information from buoys all around the world.";
-static NSString * const marineForecastDescription = @"Acurate and detail marine forecast (storms, cyclones, etс).";
+static NSString * const buoysDescription = @"Detail information from Buoys all around the world.";
+static NSString * const marineForecastDescription = @"Acurate and detail Marine Forecast (storms, cyclones, etс).";
 static NSString * const radarDescription = @"Detail radars information for all states.";
-static NSString * const seaTemperatureDescription = @"Precise sea surface temperature for many regions";
-static NSString * const tidesDescription = @"Detail information about tides for many regions.";
+static NSString * const seaTemperatureDescription = @"Precise Sea Surface Temperature for many regions";
+static NSString * const tidesDescription = @"Detail information about Tides for many regions.";
 static NSString * const wavewatchDescription = @"Detail information about waves.";
 static NSString * const weatherForecastDescription = @"Accurate Weather Forecasts for many places around the World.";
 
@@ -85,7 +85,7 @@ static NSString * const weatherForecastDescription = @"Accurate Weather Forecast
     intro.pageControlY = 90.f;
     intro.titleViewY = 20;
     intro.skipButton = nil;
-    intro.tapToNext = YES;
+    intro.tapToNext = NO;
     intro.swipeToExit = NO;
     
     [intro setDelegate:self];
@@ -111,7 +111,7 @@ static NSString * const weatherForecastDescription = @"Accurate Weather Forecast
     [btn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:16]];
     [btn setTitle:@"GET STARTED" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [btn setBackgroundColor:[UIColor greenColor]];
+    [btn setBackgroundColor:[UIColor myGreenCollor]];
     [btn addTarget:self action:@selector(getStarted:) forControlEvents:UIControlEventTouchUpInside];
     
     [intro addSubview:btn];
@@ -119,22 +119,9 @@ static NSString * const weatherForecastDescription = @"Accurate Weather Forecast
 
 - (void)getStarted:(UIButton *)sender {
     [self.intro hideWithFadeOutDuration:0.3];
-
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-
-    AKMasterTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
-    vc.type = AKTypeBuoys;
-    
-    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:vc];
-    
-    AKMainViewController *mainViewController = [storyboard instantiateViewControllerWithIdentifier:@"AKMainViewController"];
-    
-    mainViewController.rootViewController = navigationController;
-    
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    window.rootViewController = mainViewController;
+    introFinished();
+    [AKFirstLaunch firstLaunch];
 }
-
 
 
 @end

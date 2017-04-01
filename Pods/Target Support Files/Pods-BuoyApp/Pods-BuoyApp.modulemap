@@ -1,0 +1,6 @@
+framework module Pods_BuoyApp {
+  umbrella header "Pods-BuoyApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

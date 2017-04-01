@@ -9,6 +9,10 @@
 #import "AKBuoyInfoTableViewController.h"
 #import "AKServerManager.h"
 
+#import "UIRefreshControl+AFNetworking.h"
+
+#import "AKTableViewCell.h"
+
 #import "AKBuoyInfo.h"
 
 @interface AKBuoyInfoTableViewController ()
@@ -25,42 +29,59 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)reload:(id)sender {
+    NSURLSessionDataTask * task = [[AKServerManager sharedManager] getBuoyInfoFor:self.locationID withResponse:^(AKBuoyInfo *buoyInfo, NSError *error) {
+        if (buoyInfo) {
+            self.buoyInfo = buoyInfo;
+            self.title = self.buoyInfo.name;
+        }
+    }];
+    [self.refreshControl setRefreshingWithStateOfTask:task];
 }
 
 - (void)getBuoyInfoFromServer {
     [SVProgressHUD show];
     [[AKServerManager sharedManager] getBuoyInfoFor:self.locationID withResponse:^(AKBuoyInfo *buoyInfo, NSError *error) {
-        self.buoyInfo = buoyInfo;
-        self.title = self.buoyInfo.name;
-        [SVProgressHUD dismiss];
+        if (buoyInfo) {
+            self.buoyInfo = buoyInfo;
+            self.title = self.buoyInfo.name;
+            [SVProgressHUD dismiss];
+        }
     }];
 }
 
-#pragma mark - Table view data source
+#pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.buoyInfo.itemNames.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *identifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    static NSString *identifier = @"AKTableViewCell";
+    AKTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"AKTableViewCell" owner:self options: nil] firstObject];
     }
-
-    cell.textLabel.numberOfLines = 0;
     
-    NSString *value = [self.buoyInfo.itemValues objectAtIndex:indexPath.section];
-    cell.textLabel.text = value;
+    cell.userInteractionEnabled = false;
+    cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
+    cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
+    
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [self.buoyInfo.itemNames objectAtIndex:section];
+    return @"Buoy Info";
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *value = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
+    return [AKTableViewCell heightForText:value];
+}
 
 @end

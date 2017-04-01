@@ -6,21 +6,14 @@
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
-#import "AKCoreDataViewController.h"
+#import "AKTableViewController.h"
+#import <CoreData/CoreData.h>
 
-typedef NS_ENUM(NSInteger, AKType){
-    AKTypeBuoys,
-    AKTypeMarineForecast,
-    AKTypeRadars,
-    AKTypeSeaSurfaceTemperature,
-    AKTypeTides,
-    AKTypeWavewatch,
-    AKTypeWeatherForecast,
-    AKTypeCount = 7
-};
+@interface AKMasterTableViewController : AKTableViewController < NSFetchedResultsControllerDelegate >
 
-@interface AKMasterTableViewController : AKCoreDataViewController < NSFetchedResultsControllerDelegate >
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (assign, nonatomic) AKType type;
+@property (assign ,nonatomic) int parentID;
 
 @end

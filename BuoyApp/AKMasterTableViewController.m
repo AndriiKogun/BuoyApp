@@ -8,14 +8,17 @@
 
 #import "AKMasterTableViewController.h"
 #import "AKBuoyModel+CoreDataClass.h"
-#import "AKServerManager.h"
 #import "AKBuoyInfoTableViewController.h"
 #import "AKTidalTableViewController.h"
+#import "AKTableRepresentation.h"
+
+#import "AKServerManager.h"
+#import "AKCoreDataManager.h"
 
 #import "AKUtilis.h"
-
 #import "LGSideMenuController.h"
-#import "UIViewController+LGSideMenuController.h"
+
+#import "UIRefreshControl+AFNetworking.h"
 
 typedef NS_ENUM(NSInteger, AKState) {
     AKStateHiden,
@@ -25,20 +28,10 @@ typedef NS_ENUM(NSInteger, AKState) {
 typedef NS_ENUM(NSInteger, AKItemType) {
     AKItemTypeRoot,
     AKItemTypeChildItems,
-    AKSateTypeDetail,
+    AKItemTypeDetail,
 };
 
-static int const buoysID = 34655;
-static int const marineForecastID = 40454;
-static int const radarID = 45585;
-static int const seaTemperatureID = 41121;
-static int const tidesID = 50319;
-static int const wavewatchID = 41147;
-static int const weatherForecastID = 37062;
-
 @interface AKMasterTableViewController ()
-
-@property (assign ,nonatomic) int parentID;
 
 @end
 
@@ -47,74 +40,52 @@ static int const weatherForecastID = 37062;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    introFinished();
- 
     if (!loadedDataFromServer()) {
         [self getDataFromServer];
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(progressHUDDidDisappear:)
-                                                 name:SVProgressHUDDidDisappearNotification
-                                               object:nil];
-    
-    if (self.navigationController.viewControllers.count == 1) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Menu"] style:UIBarButtonItemStylePlain target:self action:@selector(openLeftView:)];
+    if (!self.parentID) {
+        NSArray *titles = [AKTableRepresentation tableRepresentation] [@"titles"];
+        NSArray *parentIDs = [AKTableRepresentation tableRepresentation] [@"parentIDs"];
+        self.parentID = [[parentIDs firstObject] intValue];
+        self.title = [titles firstObject];
     }
 }
 
--(void)setType:(AKType)type {
-    _type = type;
-    
-        switch (type) {
-            case AKTypeBuoys:
-                self.parentID = buoysID;
-                self.title = @"Buoys";
-                break;
-            case AKTypeMarineForecast:
-                self.parentID = marineForecastID;
-                self.title = @"Marine Forecast";
-                break;
-            case AKTypeRadars:
-                self.parentID = radarID;
-                self.title = @"Radars";
-                break;
-            case AKTypeSeaSurfaceTemperature:
-                self.parentID = seaTemperatureID;
-                self.title = @"Sea Surface Temperature";
-                break;
-            case AKTypeTides:
-                self.parentID = tidesID;
-                self.title = @"Tides";
-                break;
-            case AKTypeWavewatch:
-                self.parentID = wavewatchID;
-                self.title = @"Wavewatch";
-                break;
-            case AKTypeWeatherForecast:
-                self.parentID = weatherForecastID;
-                self.title = @"Weather Forecast";
-                break;
-            default:
-                break;
-        };
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.fetchedResultsController = nil;
 }
 
-- (void)openLeftView:(UIBarButtonItem *)sender {
-    [self.sideMenuController showLeftViewAnimated:YES completionHandler:nil];
+- (void)reload:(id)sender {
+    NSURLSessionDataTask *task = [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
+        if (response) {
+            self.fetchedResultsController = nil;
+            [self.tableView reloadData];
+        }
+    }];
+    [self.refreshControl setRefreshingWithStateOfTask:task];
 }
 
 - (void)getDataFromServer {
     [SVProgressHUD showProgress:0 status:@""];
-    [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
+    NSURLSessionDataTask *task = [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
         [SVProgressHUD showProgress:progress status:@""];
         
         if (response) {
-//            self.fetchedResultsController = nil;
+            self.fetchedResultsController = nil;
             [SVProgressHUD dismiss];
             loadFinished();
         }
     }];
+    [self.refreshControl setRefreshingWithStateOfTask:task];
+}
+
+- (NSManagedObjectContext *)managedObjectContext {
+    if (!_managedObjectContext) {
+        _managedObjectContext = [[AKCoreDataManager sharedManager] managedObjectContext];
+    }
+    return _managedObjectContext;
 }
 
 #pragma mark - NSFetchedResultsController
@@ -149,15 +120,37 @@ static int const weatherForecastID = 37062;
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    
     return _fetchedResultsController;
 }
 
-- (void)configureCell:(UITableViewCell *)cell withObject:(NSManagedObject *)object {
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [[self.fetchedResultsController sections] count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    return [sectionInfo numberOfObjects];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *identifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+    }
+    
+    NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+
     AKBuoyModel *buoy = (AKBuoyModel *)object;
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
     cell.textLabel.text = buoy.name;
-    cell.detailTextLabel.text = nil;
+    cell.backgroundColor = [UIColor whiteColor];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
@@ -167,32 +160,49 @@ static int const weatherForecastID = 37062;
     
     AKBuoyModel *buoy = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
+    NSLog(@"VisibleOnBuoys: %zd, ItemType: %zd",buoy.visibleOnBuoys, buoy.itemType);
     NSLog(@"VisibleOnTides: %zd, ItemType: %zd",buoy.visibleOnTides, buoy.itemType);
-    NSLog(@"ParentID: %zd, locationID: %zd",buoy.parentId, buoy.locationId);
+    NSLog(@"VisibleOnMoonPhases: %zd, ItemType: %zd",buoy.visibleOnMoonPhases, buoy.itemType);
+    NSLog(@"----------------------------------------------------------------");
     
     if (buoy.itemType == AKItemTypeChildItems) {
         AKMasterTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
         vc.parentID = buoy.locationId;
-        [self.navigationController pushViewController:vc animated:YES];
-
-    } else if (buoy.visibleOnBuoys == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
-        AKBuoyInfoTableViewController *vc = [[AKBuoyInfoTableViewController alloc] initWithStyle:UITableViewStylePlain];
-        vc.locationID = buoy.locationId;
-        [self.navigationController pushViewController:vc animated:YES];
+        vc.title = buoy.name;
         
-    } else if (buoy.visibleOnTides == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
-        AKTidalTableViewController *vc = [[AKTidalTableViewController alloc] initWithStyle:UITableViewStylePlain];
-        vc.locationID = buoy.locationId;
         [self.navigationController pushViewController:vc animated:YES];
-
-        [[AKServerManager sharedManager] getTidalTidesDataFor:buoy.locationId withResponse:^(NSDictionary *response, NSError *error) {
-            
-        }];
+        return;
         
-    } else if (buoy.visibleOnMoonPhases == AKStateVisible && buoy.itemType == AKSateTypeDetail) {
-        [[AKServerManager sharedManager] getMoonPhasesFor:buoy.locationId andOnDate:[NSDate date] withResponse:^(NSDictionary *response, NSError *error) {
+    } else if (buoy.itemType == AKItemTypeDetail) {
+        
+        if (buoy.visibleOnBuoys == AKStateVisible) {
+            AKBuoyInfoTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKBuoyInfoTableViewController"];
+            vc.visibleOn = AKVisibleOnBuoys;
+            vc.locationID = buoy.locationId;
             
-        }];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        } else if (buoy.visibleOnTides == AKStateVisible) {
+            
+            if (buoy.visibleOnMoonPhases == AKStateVisible) {
+                AKTidalTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKTidalTableViewController"];
+                vc.visibleOn = AKVisibleOnTides | AKVisibleOnMoonPhases;
+                vc.locationID = buoy.locationId;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+
+            } else {
+                AKTidalTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKTidalTableViewController"];
+                vc.visibleOn = AKVisibleOnTides;
+                vc.locationID = buoy.locationId;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            
+        } else {
+            [self showPlaceholderViewController];
+            return;
+        }
     }
 }
 

@@ -31,7 +31,7 @@
     
     self.leftViewController = vc;
     
-    [self setLeftViewEnabledWithWidth:270.f
+    [self setLeftViewEnabledWithWidth:260.f
                     presentationStyle:LGSideMenuPresentationStyleSlideAbove
                  alwaysVisibleOptions:LGSideMenuAlwaysVisibleOnNone];
     

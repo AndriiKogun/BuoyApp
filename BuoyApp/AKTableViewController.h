@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SVProgressHUD.h"
+#import "UIColor+AKMyCollors.h"
 
 @interface AKTableViewController : UITableViewController
 
-- (void)progressHUDDidDisappear:(NSNotification *)notification;
+- (void)reload:(id)sender;
+- (void)showPlaceholderViewController;
 
 @end

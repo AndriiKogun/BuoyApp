@@ -12,5 +12,14 @@
 
 + (UIColor *)myBlueCollor;
 + (UIColor *)myLightBlueCollor;
++ (UIColor *)myGreenCollor;
+
++ (UIColor *)buoyCollor;
++ (UIColor *)marineForecastCollor;
++ (UIColor *)radarCollor;
++ (UIColor *)seaTemperatureCollor;
++ (UIColor *)tidesCollor;
++ (UIColor *)wavewatchCollor;
++ (UIColor *)weatherForecastCollor;
 
 @end

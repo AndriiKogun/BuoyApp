@@ -13,6 +13,7 @@
 
 #import "AKBuoyInfo.h"
 #import "AKTidalInfo.h"
+#import "AKTidesData.h"
 
 static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywebserver.staturedev.com/api/MobileApi/";
 
@@ -47,9 +48,9 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
 
 #pragma mark - GET methods
 
-- (void)getItemsListWith:(void (^)(CGFloat, NSDictionary *, NSError *))result {
+- (NSURLSessionDataTask *)getItemsListWith:(void (^)(CGFloat, NSDictionary *, NSError *))result {
 
-    [self.manager GET:@"GetLocationList" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+    return [self.manager GET:@"GetLocationList" parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         CGFloat total = downloadProgress.totalUnitCount;
         CGFloat compl = downloadProgress.completedUnitCount;
         CGFloat percents = (compl / total);
@@ -68,10 +69,10 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
     }];
 }
 
-- (void)getBuoyInfoFor:(NSInteger)locationID withResponse:(void (^)(AKBuoyInfo *, NSError *))result {
+- (NSURLSessionDataTask *)getBuoyInfoFor:(NSInteger)locationID withResponse:(void (^)(AKBuoyInfo *, NSError *))result {
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", nil];
     
-    [self.manager GET:@"GetBouyInfo" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    return [self.manager GET:@"GetBouyInfo" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 
         NSDictionary *returnValue = [responseObject objectForKey:@"ReturnValue"];
         AKBuoyInfo *bouyInfo = [[AKBuoyInfo alloc] initWithResponse:returnValue];
@@ -82,10 +83,10 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
     }];
 }
 
-- (void)getTidalGeneralInfoFor:(NSInteger)locationID withResponse:(void (^)(AKTidalInfo *, NSError *))result {
+- (NSURLSessionDataTask *)getTidalGeneralInfoFor:(NSInteger)locationID withResponse:(void (^)(AKTidalInfo *, NSError *))result {
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", nil];
     
-    [self.manager GET:@"GetTidalGeneralInfo" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    return [self.manager GET:@"GetTidalGeneralInfo" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary *returnValue = [responseObject objectForKey:@"ReturnValue"];
         AKTidalInfo *tidesInfo = [[AKTidalInfo alloc] initWithResponse:returnValue];
@@ -96,26 +97,33 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
     }];
 }
 
-- (void)getTidalTidesDataFor:(NSInteger)locationID withResponse:(void (^)(NSDictionary *, NSError *))result {
+- (NSURLSessionDataTask *)getTidalTidesDataFor:(NSInteger)locationID withResponse:(void (^)(NSArray *, NSError *))result {
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", nil];
     
-    [self.manager GET:@"GetTidalTidesData" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    return [self.manager GET:@"GetTidalTidesData" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        NSLog(@"%@",responseObject);
+        NSDictionary *returnValue = [responseObject objectForKey:@"ReturnValue"];
+        NSArray *items = [returnValue objectForKey:@"TideDatas"];
+        NSMutableArray *tideDatas = [NSMutableArray array];
         
-        result(responseObject, nil);
+        for (NSDictionary *data in items) {
+            AKTidesData *tideData = [[AKTidesData alloc] initWithResponse:data];
+            [tideDatas addObject:tideData];
+        }
+        
+        result(tideDatas, nil);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         result(nil, error);
     }];
 }
 
-- (void)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSDate *)date withResponse:(void (^)(NSDictionary *, NSError *))result {
+- (NSURLSessionDataTask *)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSString *)date withResponse:(void (^)(NSDictionary *, NSError *))result {
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", date, @"onDate", nil];
     
-    [self.manager GET:@"GetBouyInfo" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    return [self.manager GET:@"GetMoonPhases" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         result(responseObject, nil);
 
