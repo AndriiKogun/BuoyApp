@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class AKBuoyInfo, AKTidalInfo;
+@class AKBuoyInfo, AKTidalInfo, AKMoonPhases;
 
 @interface AKServerManager : NSObject
 
@@ -23,6 +23,6 @@
 
 - (NSURLSessionDataTask *)getTidalTidesDataFor:(NSInteger)locationID withResponse:(void(^)(NSArray *tideDatas, NSError *error))result;
 
-- (NSURLSessionDataTask *)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSString *)date withResponse:(void(^)(NSDictionary *response, NSError *error))result;
+- (NSURLSessionDataTask *)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSString *)date withResponse:(void(^)(AKMoonPhases *moonPhases, NSError *error))result;
 
 @end

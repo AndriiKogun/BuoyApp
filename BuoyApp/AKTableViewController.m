@@ -9,10 +9,16 @@
 #import "AKTableViewController.h"
 #import "AKPlaceholderViewController.h"
 
+#import "SVProgressHUD.h"
+#import "Reachability.h"
 
 #import "UIViewController+LGSideMenuController.h"
+#import "UIColor+AKMyCollors.h"
 
 @interface AKTableViewController ()
+
+@property (strong, nonatomic) Reachability *reachability;
+@property (assign, nonatomic) NetworkStatus networkStatus;
 
 @end
 
@@ -23,6 +29,8 @@
     
     [SVProgressHUD setRingNoTextRadius:20];
     [SVProgressHUD setRingThickness:4];
+    [SVProgressHUD setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:16]];
+    
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD setBackgroundColor:[UIColor clearColor]];
     [SVProgressHUD setForegroundColor:[UIColor myBlueCollor]];
@@ -49,18 +57,62 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Menu"] style:UIBarButtonItemStylePlain target:self action:@selector(openLeftView:)];
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    self.reachability = reachability;
+    
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.backgroundColor = [UIColor lightGrayColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [SVProgressHUD dismiss];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
-- (void) reload:(id)sender {
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (void)dismissProgressHUDandRefreshing {
+    [SVProgressHUD dismiss];
+    [self.refreshControl endRefreshing];
+    [self.tableView reloadData];
+}
+
+- (void)reload:(id)sender {
+    
+}
+
+- (BOOL)isNetworkAvailable {
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus currentStatus = [reachability currentReachabilityStatus];
+    
+    if (currentStatus != NotReachable) {
+        return YES;
+        
+    } else {
+        return NO;
+    }
+}
+
+- (void)showNetworkAlert {
+    [SVProgressHUD dismiss];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+        [self dismissProgressHUDandRefreshing];
+    }];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Network unavailable" message:@"Please check your internet connection or try again later" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:action];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)showPlaceholderViewController {
@@ -68,8 +120,10 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+#pragma mark - Notification
+
+- (void)reachabilityChanged:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)progressHUDDWillAppear:(NSNotification *)notification {
@@ -78,7 +132,6 @@
 
 - (void)progressHUDDidDisappear:(NSNotification *)notification {
     self.sideMenuController.leftViewSwipeGestureEnabled = true;
-    [self.tableView reloadData];
 }
 
 - (void)openLeftView:(UIBarButtonItem *)sender {
@@ -90,6 +143,24 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.showAnimated) {
+        self.tableView.hidden = YES;
+        
+        [UIView transitionWithView:self.view
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            self.tableView.hidden = NO;
+                            
+                        } completion:^(BOOL finished) {
+                            self.showAnimated = NO;
+                        }];
+    }
+}
+
 
 
 @end

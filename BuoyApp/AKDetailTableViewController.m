@@ -9,6 +9,7 @@
 #import "AKDetailTableViewController.h"
 #import "AKServerManager.h"
 
+#import "SVProgressHUD.h"
 
 @interface AKDetailTableViewController ()
 
@@ -18,6 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.showAnimated = YES;
     
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
     [SVProgressHUD show];
@@ -46,13 +49,13 @@
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     header.textLabel.textAlignment = NSTextAlignmentCenter;
-    header.textLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    header.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
     header.textLabel.textColor = [UIColor whiteColor];
     header.contentView.backgroundColor = [UIColor darkGrayColor];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 25;
+    return 35;
 }
 
 

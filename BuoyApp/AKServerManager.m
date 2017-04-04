@@ -14,6 +14,7 @@
 #import "AKBuoyInfo.h"
 #import "AKTidalInfo.h"
 #import "AKTidesData.h"
+#import "AKMoonPhases.h"
 
 static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywebserver.staturedev.com/api/MobileApi/";
 
@@ -119,14 +120,16 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
     }];
 }
 
-- (NSURLSessionDataTask *)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSString *)date withResponse:(void (^)(NSDictionary *, NSError *))result {
+- (NSURLSessionDataTask *)getMoonPhasesFor:(NSInteger)locationID andOnDate:(NSString *)date withResponse:(void (^)(AKMoonPhases *, NSError *))result {
     
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", date, @"onDate", nil];
     
     return [self.manager GET:@"GetMoonPhases" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"%@", responseObject);
         
-        result(responseObject, nil);
-
+        NSDictionary *returnValue = [responseObject objectForKey:@"ReturnValue"];
+        AKMoonPhases *moonPhases = [[AKMoonPhases alloc] initWithResponse:returnValue];
+        result(moonPhases, nil);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         result(nil, error);

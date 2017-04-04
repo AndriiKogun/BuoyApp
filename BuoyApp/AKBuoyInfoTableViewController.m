@@ -31,28 +31,44 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)reachabilityChanged:(NSNotification *)notification {
+    [super reachabilityChanged:notification];
+
+    if ([self isNetworkAvailable]) {
+        [self getBuoyInfoFromServer];
+    }
+}
+
 - (void)reload:(id)sender {
-    NSURLSessionDataTask * task = [[AKServerManager sharedManager] getBuoyInfoFor:self.locationID withResponse:^(AKBuoyInfo *buoyInfo, NSError *error) {
-        if (buoyInfo) {
-            self.buoyInfo = buoyInfo;
-            self.title = self.buoyInfo.name;
-        }
-    }];
-    [self.refreshControl setRefreshingWithStateOfTask:task];
+    [self getBuoyInfoFromServer];
 }
 
 - (void)getBuoyInfoFromServer {
-    [SVProgressHUD show];
-    [[AKServerManager sharedManager] getBuoyInfoFor:self.locationID withResponse:^(AKBuoyInfo *buoyInfo, NSError *error) {
-        if (buoyInfo) {
-            self.buoyInfo = buoyInfo;
-            self.title = self.buoyInfo.name;
-            [SVProgressHUD dismiss];
-        }
-    }];
+    if ([self isNetworkAvailable]) {
+        [[AKServerManager sharedManager] getBuoyInfoFor:self.locationID withResponse:^(AKBuoyInfo *buoyInfo, NSError *error) {
+            if (buoyInfo) {
+                self.buoyInfo = buoyInfo;
+                self.title = self.buoyInfo.name;
+                
+                [self dismissProgressHUDandRefreshing];
+            }
+        }];
+        
+    } else {
+        [self showNetworkAlert];
+    }
 }
 
 #pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.buoyInfo.itemNames) {
+        return 1;
+        
+    } else {
+        return 0;
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.buoyInfo.itemNames.count;
@@ -66,9 +82,10 @@
         cell = [[[NSBundle mainBundle] loadNibNamed:@"AKTableViewCell" owner:self options: nil] firstObject];
     }
     
-    cell.userInteractionEnabled = false;
-    cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
-    cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
+        cell.userInteractionEnabled = false;
+        cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
+        cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
+    
     
     return cell;
 }

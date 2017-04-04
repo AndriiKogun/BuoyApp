@@ -13,7 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *view;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet BEMSimpleLineGraphView *myGraph;
+@property (weak, nonatomic) BEMSimpleLineGraphView *myGraph;
 
 @property (strong, nonatomic) NSArray *tideDatas;
 

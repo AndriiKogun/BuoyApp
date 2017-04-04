@@ -79,26 +79,13 @@
                                                    inManagedObjectContext:self.managedObjectContext];
     
     [fetchRequest setEntity:description];
+    /*
     [fetchRequest setResultType:NSDictionaryResultType];
-    
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"visibleOnMoonPhases == 1 AND itemType == 2"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"visibleOnMoonPhases == 1 AND itemType == 2"];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"locationId == 50319"];
 
     [fetchRequest setPredicate:predicate];
-    
-                              
-   // name = "West Coast";
-    
-   // name = Alaska;
-    //name = "Lynn Canal"
-    //name = "Haines Inlet";
-                              
-                              
-    
-    //Pacific Northwest
-    //Oregon
-    //46002 - WEST OREGON - 275NM West of Coos Bay, OR
-    
+     */
     NSError *requestError = nil;
     NSArray *resultArray = [self.managedObjectContext executeFetchRequest:fetchRequest error:&requestError];
     

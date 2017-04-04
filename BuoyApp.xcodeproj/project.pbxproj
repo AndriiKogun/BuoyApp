@@ -19,6 +19,7 @@
 		B541E5A61E8EDAEB00788DCD /* AKTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B541E5A51E8EDAEB00788DCD /* AKTableViewCell.xib */; };
 		B541E5A91E8EDB6500788DCD /* AKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B541E5A81E8EDB6500788DCD /* AKTableViewCell.m */; };
 		B541E5AC1E8F9AA300788DCD /* AKMoonPhases.m in Sources */ = {isa = PBXBuildFile; fileRef = B541E5AB1E8F9AA300788DCD /* AKMoonPhases.m */; };
+		B541E5F71E926EE300788DCD /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B541E5F61E926EE300788DCD /* Reachability.m */; };
 		B5527F6B1E7B35EF0071C844 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F6A1E7B35EF0071C844 /* main.m */; };
 		B5527F6E1E7B35EF0071C844 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5527F6D1E7B35EF0071C844 /* AppDelegate.m */; };
 		B5527F741E7B35EF0071C844 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5527F721E7B35EF0071C844 /* Main.storyboard */; };
@@ -84,6 +85,8 @@
 		B541E5A81E8EDB6500788DCD /* AKTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKTableViewCell.m; sourceTree = "<group>"; };
 		B541E5AA1E8F9AA300788DCD /* AKMoonPhases.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKMoonPhases.h; sourceTree = "<group>"; };
 		B541E5AB1E8F9AA300788DCD /* AKMoonPhases.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKMoonPhases.m; sourceTree = "<group>"; };
+		B541E5F51E926EE300788DCD /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		B541E5F61E926EE300788DCD /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		B5527F661E7B35EF0071C844 /* BuoyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuoyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5527F6A1E7B35EF0071C844 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5527F6C1E7B35EF0071C844 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -224,10 +227,22 @@
 		B541E5A41E8D4DAB00788DCD /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B5527FAD1E7C81B10071C844 /* Model */,
+				B5021A081E8687A700A88077 /* CoreData Manager */,
 				B541E5A11E8D294F00788DCD /* AKTableRepresentation.h */,
 				B541E5A21E8D294F00788DCD /* AKTableRepresentation.m */,
 			);
 			name = Data;
+			sourceTree = "<group>";
+		};
+		B541E5F91E926F2900788DCD /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				B541E5F51E926EE300788DCD /* Reachability.h */,
+				B541E5F61E926EE300788DCD /* Reachability.m */,
+				B5021A051E86877400A88077 /* Server Manager */,
+			);
+			name = Server;
 			sourceTree = "<group>";
 		};
 		B5527F5D1E7B35EF0071C844 = {
@@ -261,10 +276,8 @@
 				B58AE2C31E8941DB00C1F020 /* AKFirstLaunch.m */,
 				B55280071E8034EA0071C844 /* AKUtilis.h */,
 				B55280081E8034EA0071C844 /* AKUtilis.m */,
+				B541E5F91E926F2900788DCD /* Server */,
 				B541E5A41E8D4DAB00788DCD /* Data */,
-				B5527FAD1E7C81B10071C844 /* Model */,
-				B5021A051E86877400A88077 /* Server Manager */,
-				B5021A081E8687A700A88077 /* CoreData Manager */,
 				B5527FB91E7DD54F0071C844 /* Category */,
 				B5527FB41E7C87B10071C844 /* View */,
 				B5527FB51E7C87E90071C844 /* Controllers */,
@@ -563,6 +576,7 @@
 				B5C5ED2A1E832ECD00D07F63 /* AKObject.m in Sources */,
 				B541E5A01E8C732D00788DCD /* AKTidalInfoTableViewCell.m in Sources */,
 				B5D4CE0D1E8ABEC90090780D /* AKPlaceholderViewController.m in Sources */,
+				B541E5F71E926EE300788DCD /* Reachability.m in Sources */,
 				B541E59A1E8AD40400788DCD /* AKTidesData.m in Sources */,
 				B5527FA11E7B3BD30071C844 /* AKServerManager.m in Sources */,
 				B541E5AC1E8F9AA300788DCD /* AKMoonPhases.m in Sources */,

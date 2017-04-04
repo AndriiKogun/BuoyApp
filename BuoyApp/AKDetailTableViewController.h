@@ -22,8 +22,7 @@ typedef NS_ENUM(NSInteger, AKVisibleOn){
 
 @interface AKDetailTableViewController : AKTableViewController
 
-@property (assign, nonatomic) NSInteger locationID;
 @property (assign, nonatomic) AKVisibleOn visibleOn;
-
+@property (assign, nonatomic) NSInteger locationID;
 
 @end

@@ -15,6 +15,7 @@
 #import "AKServerManager.h"
 #import "AKCoreDataManager.h"
 
+#import "SVProgressHUD.h"
 #import "AKUtilis.h"
 #import "LGSideMenuController.h"
 
@@ -40,13 +41,10 @@ typedef NS_ENUM(NSInteger, AKItemType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (!loadedDataFromServer()) {
-        [self getDataFromServer];
-    }
-    
     if (!self.parentID) {
         NSArray *titles = [AKTableRepresentation tableRepresentation] [@"titles"];
         NSArray *parentIDs = [AKTableRepresentation tableRepresentation] [@"parentIDs"];
+        self.showAnimated = YES;
         self.parentID = [[parentIDs firstObject] intValue];
         self.title = [titles firstObject];
     }
@@ -57,24 +55,36 @@ typedef NS_ENUM(NSInteger, AKItemType) {
     self.fetchedResultsController = nil;
 }
 
+- (void)reachabilityChanged:(NSNotification *)notification {
+    [super reachabilityChanged:notification];
+    
+    if (!loadedDataFromServer() && [self isNetworkAvailable]) {
+        [self getDataFromServer];
+    }
+}
+
 - (void)reload:(id)sender {
-    NSURLSessionDataTask *task = [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
-        if (response) {
-            self.fetchedResultsController = nil;
-            [self.tableView reloadData];
-        }
-    }];
-    [self.refreshControl setRefreshingWithStateOfTask:task];
+    if ([self isNetworkAvailable]) {
+        NSURLSessionDataTask *task = [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
+            if (response) {
+                self.fetchedResultsController = nil;
+                [self.tableView reloadData];
+            }
+        }];
+        [self.refreshControl setRefreshingWithStateOfTask:task];
+        
+    } else {
+        [self showNetworkAlert];
+    }
 }
 
 - (void)getDataFromServer {
-    [SVProgressHUD showProgress:0 status:@""];
     NSURLSessionDataTask *task = [[AKServerManager sharedManager] getItemsListWith:^(CGFloat progress, NSDictionary *response, NSError *error) {
-        [SVProgressHUD showProgress:progress status:@""];
+        [SVProgressHUD showProgress:progress status:[NSString stringWithFormat:@"Loading...\n%.0f%%", progress * 100]];
         
         if (response) {
             self.fetchedResultsController = nil;
-            [SVProgressHUD dismiss];
+            [self dismissProgressHUDandRefreshing];
             loadFinished();
         }
     }];

@@ -7,12 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SVProgressHUD.h"
-#import "UIColor+AKMyCollors.h"
+
 
 @interface AKTableViewController : UITableViewController
 
+@property (assign, nonatomic) BOOL showAnimated;
+
 - (void)reload:(id)sender;
 - (void)showPlaceholderViewController;
+- (void)dismissProgressHUDandRefreshing;
+
+- (void)showNetworkAlert;
+- (BOOL)isNetworkAvailable;
+
+- (void)reachabilityChanged:(NSNotification *)notification;
 
 @end

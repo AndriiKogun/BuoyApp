@@ -13,12 +13,18 @@
 #import "AKTableViewCell.h"
 
 #import "AKTidalInfo.h"
+#import "AKMoonPhases.h"
 
 @interface AKTidalTableViewController ()
 
+@property (strong, nonatomic) AKMoonPhases *moonPhases;
 @property (strong, nonatomic) AKTidalInfo *tidalInfo;
 @property (strong, nonatomic) NSArray *tideDatas;
 
+@property (strong, nonatomic) NSString *currentDate;
+@property (strong, nonatomic) dispatch_group_t group;
+
+@property (assign, nonatomic) NSInteger sectionsCount;
 
 @end
 
@@ -27,57 +33,95 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-    });
-    [self getTidalTidesDataFromServer];
-
-    [self getTidalInfoFromServer];
-    
-    if (self.visibleOn == (AKVisibleOnTides | AKVisibleOnMoonPhases)) {
-        [self getMoonPhasesFromServer];
-    }
-    
+    [self getDataFromServer];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+- (NSString *)currentDate {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    return [formatter stringFromDate:[NSDate date]];
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification {
+    [super reachabilityChanged:notification];
+    
+    if ([self isNetworkAvailable]) {
+       [self getDataFromServer];
+    }
+}
+
+- (void)reload:(id)sender {
+    [self getDataFromServer];
+}
+
+- (void)getDataFromServer {
+    if ([self isNetworkAvailable]) {
+        self.group = dispatch_group_create();
+        
+        self.sectionsCount = 0;
+        
+        [self getTidalTidesDataFromServer];
+        [self getTidalInfoFromServer];
+        
+        if (self.visibleOn == (AKVisibleOnTides | AKVisibleOnMoonPhases)) {
+            [self getMoonPhasesFromServer];
+        }
+        
+        dispatch_group_notify(self.group , dispatch_get_main_queue(), ^{
+            self.title = self.tidalInfo.tideName;
+            [self dismissProgressHUDandRefreshing];
+        });
+        
+    } else {
+        [self showNetworkAlert];
+    }
+}
+
 - (NSURLSessionDataTask *)getTidalTidesDataFromServer {
+    dispatch_group_enter(self.group);
+
     return [[AKServerManager sharedManager] getTidalTidesDataFor:self.locationID withResponse:^(NSArray *tideDatas, NSError *error) {
         
         if (tideDatas) {
             self.tideDatas = tideDatas;
+            self.sectionsCount ++;
         }
-        [SVProgressHUD dismiss];
+        
+        dispatch_group_leave(self.group);
     }];
 }
 
 - (NSURLSessionDataTask *)getTidalInfoFromServer {
+    dispatch_group_enter(self.group);
+
     return [[AKServerManager sharedManager] getTidalGeneralInfoFor:self.locationID withResponse:^(AKTidalInfo *tidalInfo, NSError *error) {
+        
         if (tidalInfo) {
             self.tidalInfo = tidalInfo;
-            self.title = self.tidalInfo.tideName;
-            [SVProgressHUD dismiss];
+            self.sectionsCount ++;
         }
+        
+        dispatch_group_leave(self.group);
     }];
 }
 
 - (NSURLSessionDataTask *)getMoonPhasesFromServer {
-    return [[AKServerManager sharedManager] getMoonPhasesFor:self.locationID andOnDate:@"2017-03-30" withResponse:^(NSDictionary *response, NSError *error) {
-        /*
-        2017-03-30------ 35737
-        2017-03-30T12:55:00
-        2017-03-30 12:55:00
-         */
-        NSLog(@"%@",response);
+    dispatch_group_enter(self.group);
 
+    return [[AKServerManager sharedManager] getMoonPhasesFor:self.locationID andOnDate:self.currentDate withResponse:^(AKMoonPhases *moonPhases, NSError *error) {
+
+        if (moonPhases) {
+            self.moonPhases = moonPhases;
+            self.sectionsCount ++;
+        }
+        
+        dispatch_group_leave(self.group);
     }];
 }
-
-
-
 
 #pragma mark - UITableViewDataSource
 
@@ -94,15 +138,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-   
-    if (self.tidalInfo && self.tideDatas) {
-        return 2;
-    }
-    
-    if (self.tideDatas) {
-        return 1;
-    }
-    return 0;
+    return self.sectionsCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -110,8 +146,11 @@
     if (indexPath.section == 0) {
         static NSString *identifier = @"AKTidesDataTableViewCell";
         AKTidesDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.tideDatas = self.tideDatas;
-        NSLog(@"hello");
+        
+        if (!cell.tideDatas) {
+            cell.tideDatas = self.tideDatas;
+        }
+        
         return cell;
         
     } else {
@@ -137,8 +176,11 @@
     } else if (section == 1) {
         return @"Tidal General Info";
         
+    } else if (section == 2) {
+        return @"Moon Phases";
+        
     } else {
-        return 0;
+        return @"";
     }
 }
 

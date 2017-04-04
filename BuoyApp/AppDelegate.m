@@ -13,13 +13,11 @@
 
 #import "AFNetworkActivityIndicatorManager.h"
 
-
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
@@ -31,8 +29,8 @@
 //    [[AKCoreDataManager sharedManager] deleteAllObjects];
     
     
-    NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
-    [[AKCoreDataManager sharedManager] printArray:allObjects];
+//    NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
+//    [[AKCoreDataManager sharedManager] printArray:allObjects];
     
     [AKFirstLaunch firstLaunch];
     
