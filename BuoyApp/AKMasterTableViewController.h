@@ -6,10 +6,10 @@
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
-#import "AKTableViewController.h"
+#import "AKBaseTableViewController.h"
 #import <CoreData/CoreData.h>
 
-@interface AKMasterTableViewController : AKTableViewController < NSFetchedResultsControllerDelegate >
+@interface AKMasterTableViewController : AKBaseTableViewController < NSFetchedResultsControllerDelegate >
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;

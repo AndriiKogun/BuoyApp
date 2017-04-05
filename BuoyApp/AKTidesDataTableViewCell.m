@@ -15,10 +15,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    //    BEMSimpleLineGraphView *myGraph = [[BEMSimpleLineGraphView alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
-    //    myGraph.delegate = self;
-    //    myGraph.dataSource = self;
-    
     // Create a gradient to apply to the bottom portion of the graph
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
     size_t num_locations = 2;
@@ -36,7 +32,7 @@
     self.myGraph.enablePopUpReport = YES;
     self.myGraph.enableYAxisLabel = YES;
     self.myGraph.autoScaleYAxis = YES;
-    self.myGraph.alwaysDisplayDots = YES;
+    self.myGraph.alwaysDisplayDots = NO;
     self.myGraph.enableReferenceXAxisLines = YES;
     self.myGraph.enableReferenceYAxisLines = YES;
     self.myGraph.enableReferenceAxisFrame = YES;
@@ -47,27 +43,15 @@
     self.myGraph.averageLine.color = [UIColor darkGrayColor];
     self.myGraph.averageLine.width = 2.5;
     self.myGraph.averageLine.dashPattern = @[@(2),@(2)];
-    self.myGraph.widthLine = 4;
-    
-    self.myGraph.colorXaxisLabel = [UIColor whiteColor];
-    self.myGraph.colorYaxisLabel = [UIColor whiteColor];
     
     // Set the graph's animation style to draw, fade, or none
-    self.myGraph.animationGraphEntranceTime = 1.5;
-    self.myGraph.animationGraphStyle = BEMLineAnimationNone;
-    
+    self.myGraph.animationGraphStyle = BEMLineAnimationDraw;
+    self.myGraph.animationGraphEntranceTime = 0.6;
     // Dash the y reference lines
     self.myGraph.lineDashPatternForReferenceYAxisLines = @[@(2),@(2)];
     
     // Show the y axis values with this format string
     self.myGraph.formatStringForValues = @"%.1f";
-        
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (void)setTideDatas:(NSArray *)tideDatas {

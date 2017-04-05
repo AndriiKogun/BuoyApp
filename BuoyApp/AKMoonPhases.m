@@ -14,7 +14,7 @@
 
     self = [super init];
     if (self) {
-        self.name = [response objectForKey:@"Name"];
+        self.name = [[response objectForKey:@"Name"] capitalizedString];
         self.time = [response objectForKey:@"Time"];
 
     }

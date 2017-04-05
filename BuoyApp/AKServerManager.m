@@ -125,7 +125,6 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
     NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:locationID], @"locationId", date, @"onDate", nil];
     
     return [self.manager GET:@"GetMoonPhases" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@", responseObject);
         
         NSDictionary *returnValue = [responseObject objectForKey:@"ReturnValue"];
         AKMoonPhases *moonPhases = [[AKMoonPhases alloc] initWithResponse:returnValue];
@@ -135,10 +134,6 @@ static NSString * const akLocalBuoyWebServerBaseUrlString = @"http://localbuoywe
         result(nil, error);
     }];
 }
-
-
-
-
 
 
 

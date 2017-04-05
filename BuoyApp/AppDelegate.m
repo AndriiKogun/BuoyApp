@@ -26,12 +26,6 @@
     
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
-//    [[AKCoreDataManager sharedManager] deleteAllObjects];
-    
-    
-//    NSArray *allObjects = [[AKCoreDataManager sharedManager] allObjects];
-//    [[AKCoreDataManager sharedManager] printArray:allObjects];
-    
     [AKFirstLaunch firstLaunch];
     
     return YES;

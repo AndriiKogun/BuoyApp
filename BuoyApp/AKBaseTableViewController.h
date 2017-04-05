@@ -1,5 +1,5 @@
 //
-//  AKTableViewController.h
+//  AKBaseTableViewController.h
 //  BuoyApp
 //
 //  Created by Andrii on 3/27/17.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface AKTableViewController : UITableViewController
+@interface AKBaseTableViewController : UITableViewController
 
 @property (assign, nonatomic) BOOL showAnimated;
 

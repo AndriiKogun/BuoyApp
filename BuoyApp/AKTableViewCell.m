@@ -37,7 +37,7 @@
                                   attributes:attributes
                                      context:nil];
     
-    return CGRectGetHeight(rect) + 2 * offset + 25;
+    return MAX(69, CGRectGetHeight(rect) + 2 * offset + 25);
 }
 
 @end

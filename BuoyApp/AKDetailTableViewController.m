@@ -49,13 +49,13 @@
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     header.textLabel.textAlignment = NSTextAlignmentCenter;
-    header.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+    header.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
     header.textLabel.textColor = [UIColor whiteColor];
     header.contentView.backgroundColor = [UIColor darkGrayColor];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 35;
+    return 25;
 }
 
 

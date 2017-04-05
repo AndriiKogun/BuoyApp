@@ -78,14 +78,9 @@
     static NSString *identifier = @"AKTableViewCell";
     AKTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"AKTableViewCell" owner:self options: nil] firstObject];
-    }
-    
-        cell.userInteractionEnabled = false;
-        cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
-        cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
-    
+    cell.userInteractionEnabled = false;
+    cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
+    cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
     
     return cell;
 }

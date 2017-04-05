@@ -32,7 +32,7 @@
         
         if (![object isEqual:[NSNull null]] && ![object isEqual:@""]) {
             
-            [names addObject:key];
+            [names addObject:[self createTitleFromKey:key]];
             [items setObject:object forKey:key];
             
             if ([object isKindOfClass:[NSNumber class]]) {
@@ -54,6 +54,22 @@
         }
     }
     return items;
+}
+
+- (NSString *)createTitleFromKey:(NSString *)name {
+    
+    NSCharacterSet *characterSet = [NSCharacterSet uppercaseLetterCharacterSet];
+    NSMutableString *tempString = [NSMutableString stringWithString:name];
+    
+    NSRange searchRange = NSMakeRange(1, tempString.length - 1);
+    NSRange range;
+
+    while ((range = [tempString rangeOfCharacterFromSet:characterSet options:0 range:searchRange]).location != NSNotFound) {
+        [tempString insertString:@" " atIndex:range.location];
+        searchRange = NSMakeRange(NSMaxRange(range) + 1, tempString.length - 1 - NSMaxRange(range));
+    }
+    
+    return tempString;
 }
 
 @end

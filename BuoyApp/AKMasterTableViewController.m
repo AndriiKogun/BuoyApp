@@ -170,11 +170,6 @@ typedef NS_ENUM(NSInteger, AKItemType) {
     
     AKBuoyModel *buoy = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
-    NSLog(@"VisibleOnBuoys: %zd, ItemType: %zd",buoy.visibleOnBuoys, buoy.itemType);
-    NSLog(@"VisibleOnTides: %zd, ItemType: %zd",buoy.visibleOnTides, buoy.itemType);
-    NSLog(@"VisibleOnMoonPhases: %zd, ItemType: %zd",buoy.visibleOnMoonPhases, buoy.itemType);
-    NSLog(@"----------------------------------------------------------------");
-    
     if (buoy.itemType == AKItemTypeChildItems) {
         AKMasterTableViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKMasterTableViewController"];
         vc.parentID = buoy.locationId;

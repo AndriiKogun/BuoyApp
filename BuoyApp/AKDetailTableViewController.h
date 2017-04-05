@@ -6,7 +6,7 @@
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
-#import "AKTableViewController.h"
+#import "AKBaseTableViewController.h"
 
 typedef NS_ENUM(NSInteger, AKVisibleOn){
     AKVisibleOnBuoys                = 1 << 0,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, AKVisibleOn){
 };
 
 
-@interface AKDetailTableViewController : AKTableViewController
+@interface AKDetailTableViewController : AKBaseTableViewController
 
 @property (assign, nonatomic) AKVisibleOn visibleOn;
 @property (assign, nonatomic) NSInteger locationID;

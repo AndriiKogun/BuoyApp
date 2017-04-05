@@ -6,7 +6,7 @@
 //  Copyright © 2017 Andrii. All rights reserved.
 //
 
-#import "AKTableViewController.h"
+#import "AKBaseTableViewController.h"
 #import "AKPlaceholderViewController.h"
 
 #import "SVProgressHUD.h"
@@ -15,14 +15,14 @@
 #import "UIViewController+LGSideMenuController.h"
 #import "UIColor+AKMyCollors.h"
 
-@interface AKTableViewController ()
+@interface AKBaseTableViewController ()
 
 @property (strong, nonatomic) Reachability *reachability;
 @property (assign, nonatomic) NetworkStatus networkStatus;
 
 @end
 
-@implementation AKTableViewController
+@implementation AKBaseTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -40,6 +40,13 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)resetTableView {
+    self.sectionsCount = 0;
+    self.moonPhases = nil;
+    self.tidalInfo = nil;
+    self.tideDatas = nil;
+}
+
 - (NSString *)currentDate {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd"];
@@ -62,8 +69,7 @@
     if ([self isNetworkAvailable]) {
         self.group = dispatch_group_create();
         
-        self.sectionsCount = 0;
-        
+        [self resetTableView];
         [self getTidalTidesDataFromServer];
         [self getTidalInfoFromServer];
         
@@ -133,7 +139,9 @@
         return self.tidalInfo.itemNames.count;
         
     } else {
-        return 0;
+        NSInteger count = self.moonPhases.moonInfos.count + self.moonPhases.itemNames.count;
+        
+        return count;
     }
 }
 
@@ -147,24 +155,12 @@
         static NSString *identifier = @"AKTidesDataTableViewCell";
         AKTidesDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         
-        if (!cell.tideDatas) {
-            cell.tideDatas = self.tideDatas;
-        }
-        
         return cell;
         
     } else {
         static NSString *identifier = @"AKTableViewCell";
         AKTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        
-        if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"AKTableViewCell" owner:self options: nil] firstObject];
-        }
-        
-        cell.userInteractionEnabled = false;
-        cell.titleLabel.text = [self.tidalInfo.itemNames objectAtIndex:indexPath.row];
-        cell.valueLabel.text = [self.tidalInfo.itemValues objectAtIndex:indexPath.row];
-        
+       
         return cell;
     }
 }
@@ -176,11 +172,8 @@
     } else if (section == 1) {
         return @"Tidal General Info";
         
-    } else if (section == 2) {
+    } else  {
         return @"Moon Phases";
-        
-    } else {
-        return @"";
     }
 }
 
@@ -191,7 +184,39 @@
         return 240;
         
     } else {
-        return 50;
+        return 69;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    
+    if (indexPath.section == 0) {
+        AKTidesDataTableViewCell *myCell = (AKTidesDataTableViewCell *)cell;
+        
+        if (!myCell.tideDatas) {
+            myCell.tideDatas = self.tideDatas;
+        }
+        
+    } else {
+        AKTableViewCell *myCell = (AKTableViewCell *)cell;
+        myCell.userInteractionEnabled = false;
+
+        if (indexPath.section == 1) {
+            myCell.titleLabel.text = [self.tidalInfo.itemNames objectAtIndex:indexPath.row];
+            myCell.valueLabel.text = [self.tidalInfo.itemValues objectAtIndex:indexPath.row];
+            
+        } else {
+            if (indexPath.row < self.moonPhases.moonInfos.count) {
+                AKMoonInfos *moonInfos = [self.moonPhases.moonInfos objectAtIndex:indexPath.row];
+                myCell.titleLabel.text =  moonInfos.name;
+                myCell.valueLabel.text = moonInfos.time;
+                
+            } else {
+                myCell.titleLabel.text = [self.moonPhases.itemNames objectAtIndex:indexPath.row - self.moonPhases.moonInfos.count];;
+                myCell.valueLabel.text = [self.moonPhases.itemValues objectAtIndex:indexPath.row - self.moonPhases.moonInfos.count];
+            }
+        }
     }
 }
 
