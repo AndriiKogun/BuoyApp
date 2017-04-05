@@ -736,7 +736,7 @@
 				DEVELOPMENT_TEAM = C24TZYQTQV;
 				INFOPLIST_FILE = BuoyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = AK.BuoyApp;
+				PRODUCT_BUNDLE_IDENTIFIER = AK.BuoyApp.F1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -749,7 +749,7 @@
 				DEVELOPMENT_TEAM = C24TZYQTQV;
 				INFOPLIST_FILE = BuoyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = AK.BuoyApp;
+				PRODUCT_BUNDLE_IDENTIFIER = AK.BuoyApp.F1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -26,7 +26,6 @@
     self.rootViewCoverColorForLeftView = [UIColor clearColor];
     self.leftViewStatusBarVisibleOptions = LGSideMenuStatusBarVisibleOnAll;
   
-    
     AKLeftViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"AKLeftViewController"];
     
     self.leftViewController = vc;

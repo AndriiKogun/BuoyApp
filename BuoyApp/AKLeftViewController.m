@@ -64,7 +64,6 @@
     vc.title = [titles objectAtIndex:indexPath.row];
 
     [[UINavigationBar appearance] setBarTintColor:[colors objectAtIndex:indexPath.row]];
-
     
     UINavigationController *nc = [[UINavigationController alloc]initWithRootViewController:vc];
     

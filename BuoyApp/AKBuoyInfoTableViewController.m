@@ -78,10 +78,6 @@
     static NSString *identifier = @"AKTableViewCell";
     AKTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
-    cell.userInteractionEnabled = false;
-    cell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
-    cell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
-    
     return cell;
 }
 
@@ -94,6 +90,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *value = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
     return [AKTableViewCell heightForText:value];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    
+    AKTableViewCell *myCell = (AKTableViewCell *)cell;
+    
+    myCell.userInteractionEnabled = false;
+    myCell.titleLabel.text = [self.buoyInfo.itemNames objectAtIndex:indexPath.row];
+    myCell.valueLabel.text = [self.buoyInfo.itemValues objectAtIndex:indexPath.row];
 }
 
 @end

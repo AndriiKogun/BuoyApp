@@ -82,7 +82,6 @@
 - (void)dismissProgressHUDandRefreshing {
     [SVProgressHUD dismiss];
     [self.refreshControl endRefreshing];
-    [self.tableView reloadData];
 }
 
 - (void)reload:(id)sender {
@@ -132,6 +131,7 @@
 
 - (void)progressHUDDidDisappear:(NSNotification *)notification {
     self.sideMenuController.leftViewSwipeGestureEnabled = true;
+    [self.tableView reloadData];
 }
 
 - (void)openLeftView:(UIBarButtonItem *)sender {

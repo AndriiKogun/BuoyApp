@@ -53,11 +53,17 @@ typedef NS_ENUM(NSInteger, AKItemType) {
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.fetchedResultsController = nil;
+    
+    [self firstTableLoad]; // for test on simulator
 }
 
 - (void)reachabilityChanged:(NSNotification *)notification {
     [super reachabilityChanged:notification];
     
+    [self firstTableLoad];
+}
+
+- (void)firstTableLoad {
     if (!loadedDataFromServer() && [self isNetworkAvailable]) {
         [self getDataFromServer];
     }
